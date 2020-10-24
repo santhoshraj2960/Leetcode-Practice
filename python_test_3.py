@@ -1994,46 +1994,6 @@ print('finish')
 # space O(n)
 
 
-'''
-DIP - Google
-
-Given a list of points and a number k, find the k closest points to the origin.
-
-def findClosestPointsOrigin(points, k):
-  # Fill this in.
-
-print (findClosestPointsOrigin([[1, 1], [3, 3], [2, 2], [4, 4], [-1, -1]], 3))
-# [[-1, -1], [1, 1], [2, 2]]
-'''
-
-'''
-Questions to ask the interviewer
-1 - What should I do if k is larger than the len of list
-2 - What should I do if k = 1 and there are 2 points on the graph with the same shortest distance from origin?
-'''
-import heapq
-import math
-
-points = [[-1, -1], [1, 1], [2, 2]]
-origin = (0,0)
-distance_list = []
-heapq.heapify(distance_list)
-k = 3
-
-for point in points:
-    x_dist = point[0] - origin[0]
-    y_dist = point[1] - origin[1]
-    dist_sq = x_dist ** 2 + y_dist ** 2
-    d = math.sqrt(dist_sq)
-    heapq.heappush(distance_list, (d,point[0], point[1]))
-
-while(k > 0 and distance_list):
-    print(heapq.heappop(distance_list))
-    k -= 1
-
-# time O(n) + k log n
-# space O(n)
-
 583. Deletion Distance
 https://leetcode.com/problems/delete-operation-for-two-strings/
 
@@ -2552,35 +2512,6 @@ while(total_items_to_transport > 0):
 print(time_needed)
 
 # time O(N * (n ^ 2))
-
-'''
-https://oss.1point3acres.cn/forum/202002/16/105235vyhn4ghwyfz9czzt.jpg!c
-'''
-import heapq
-
-s = 'ababyz'
-s_list = [char for char in s]
-heapq.heapify(s_list)
-prev_char = float('-inf')
-ss = [prev_char] # a b y z
-secondary_list = [] # a a b
-
-while(s_list):
-    prev_char = heapq.heappop(s_list)
-    ss.append(prev_char)
-
-    while(s_list and s_list[0] == prev_char):
-        secondary_list.append(heapq.heappop(s_list))
-
-heapq._heapify_max(secondary_list)
-
-while(secondary_list):
-    ss.append(heapq.heappop(secondary_list))
-
-ss = ''.join(ss[i] for i in range(1, len(ss)))
-print(ss)
-
-# time: n log n
 
 '''
 HackerRank
@@ -3503,36 +3434,6 @@ maa = MaxAvgAge()
 print(maa.get_max_avg_team_age(node_20))
 
 
-'''
-Amazon OA
-Max profit for Amazon basics
-'''
-
-
-def highest_profit(numSuppliers, inventory, order):
-    import heapq
-    heap = []
-    for item in inventory:
-        if item > 0:
-            heapq.heappush(heap, item * (-1))
-
-    profit = 0
-
-    while order > 0 and heap:
-
-        a = heapq.heappop(heap)
-        profit += a * (-1)
-        a += 1
-        if a:
-            heapq.heappush(heap, a)
-
-        order -= 1
-
-    return profit
-
-
-print
-'Highest Profit: ', highest_profit(2, [3, 5], 6)
 
 '''
 Amazon OA 
@@ -3624,35 +3525,6 @@ Max of min altitudes - matrix
 https://leetcode.com/discuss/interview-question/383669/
 '''
 
-'''
-Amazon OA
-max_num_boxes
-'''
-
-import heapq
-
-
-def maxUnits(num, boxes, unitSize, unitsPerBox, truckSize):
-    heap = []
-
-    for i in range(len(boxes)):
-        units_per_box = unitsPerBox[i]
-        heapq.heappush(heap, (-units_per_box, boxes[i]))
-
-    ret = 0
-
-    while truckSize > 0 and heap:
-        curr_max = heapq.heappop(heap)
-        max_boxes = min(truckSize, curr_max[1])
-        truckSize -= max_boxes
-        ret += max_boxes * (curr_max[0] * -1)
-
-    return ret
-
-
-# test cases
-print(maxUnits(3, [1, 2, 3], 3, [3, 2, 1], 3))
-print(maxUnits(3, [2, 5, 3], 3, [3, 2, 1], 50))
 
 '''
 Goldman - Shortest Path with wildcard
@@ -3887,7 +3759,6 @@ class Solution:
 Amazon OA - Pagination
 https://leetcode.com/discuss/interview-question/801590/amazon-oa2-pagination
 '''
-import heapq
 from collections import namedtuple
 
 sort_parameter = 0
@@ -4425,95 +4296,6 @@ class Solution:
 # space O(1)
 
 '''
-153 Find Minimum in Rotated Sorted Array
-https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
-
-Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
-
-(i.e.,  [0,1,2,4,5,6,7] might become  [4,5,6,7,0,1,2]).
-
-Find the minimum element.
-
-You may assume no duplicate exists in the array.
-'''
-
-class Solution:
-    def findMin(self, nums: List[int]) -> int:
-        i = 0
-        j = len(nums) - 1
-
-        if nums[j] > nums[i]:
-            return nums[i]
-
-        while (i < j):
-            mid = (i + j) // 2
-
-            if nums[mid] > nums[j]:
-                i = mid + 1
-            else:
-                j = mid # this is just "mid" and NOT "mid - 1". Your mid elem may be your ans. If you do mid - 1, you are skipping mid elem all together
-
-        return nums[j]
-
-# time O(log n)
-# space O(1)
-
-'''
-33 Search in Rotated Sorted Array
-https://leetcode.com/problems/search-in-rotated-sorted-array/
-
-Given an integer array nums sorted in ascending order, and an integer target.
-
-Suppose that nums is rotated at some pivot unknown to you beforehand (i.e., [0,1,2,4,5,6,7] might become [4,5,6,7,0,1,2]).
-
-You should search for target in nums and if you found return its index, otherwise return -1
-'''
-
-
-class Solution:
-    def search(self, nums: List[int], target: int) -> int:
-        lo = 0
-        hi = len(nums) - 1
-
-        while (lo < hi):
-            mid = (lo + hi) // 2
-
-            if nums[mid] > nums[hi]:
-                lo = mid + 1
-            else:
-                hi = mid
-
-        rotation_point = lo
-
-        if target > nums[-1]:
-            lo = 0
-            hi = rotation_point - 1
-        else:
-            lo = rotation_point
-            hi = len(nums) - 1
-
-        mid = -1
-
-        while (lo <= hi):
-            mid = (lo + hi) // 2
-
-            if nums[mid] == target:
-                break
-            elif nums[mid] > target:
-                hi = mid - 1
-            else:
-                lo = mid + 1
-
-        if mid != -1 and nums[mid] == target:
-            return mid
-        else:
-            return -1
-
-# time O(log n)
-# space O(1)
-
-
-'''
 Pimco Onine assessment
 Farmer harvest. Circular farm is divided into equal poritions os size len(profit). K is the num of segments he can choose to reap. He also can reap the segments opposite (in the circle) to each of those 
 k segments. Profit of choosing this k segments is profit of the k segments + profit of the segments opposite to those k segments. Compute max profit
@@ -4943,11 +4725,196 @@ class Codec:
 # time O(n * k) n is the num of words and k is the len of the longest word
 # space O(n * k)
 
+'''
+8. String to Integer (atoi)
+https://leetcode.com/problems/string-to-integer-atoi/
+'''
+
+
+class Solution:
+    def myAtoi(self, s: str) -> int:
+        s = s.strip()
+
+        if len(s) > 1 and s[0] in ['+', '-'] and s[1] in ['+', '-']:
+            return 0
+
+        s = s.strip('+')
+
+        if s == '':
+            return 0
+
+        mul_factor = 1
+
+        if s[0] == '-':
+            mul_factor = -1
+            s = s[1:]
+
+        i = 0
+        res = 0
+
+        while (i < len(s)):
+            num_at_i = s[i]
+
+            if num_at_i.isnumeric() == False:
+                break
+
+            res = ((res * 10) + int(num_at_i))
+            i += 1
+
+            if res > (2 ** 31) and mul_factor == -1:
+                return -(2 ** 31)
+
+            if res > (2 ** 31 - 1) and mul_factor == 1:
+                return (2 ** 31 - 1)
+
+        return mul_factor * res
+
+
+# time O(n)
+# space O(1)
 # ------------------------------------------------------------------- End of Array block Binary search block ------------------------------------------------------------------------------
 
 
 
 
+
+
+
+
+
+
+
+
+
+# ------------------------------------------------------------- Binary search block ---------------------------------------------------------------------------------------------
+'''
+153 Find Minimum in Rotated Sorted Array
+https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+
+Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
+
+(i.e.,  [0,1,2,4,5,6,7] might become  [4,5,6,7,0,1,2]).
+
+Find the minimum element.
+
+You may assume no duplicate exists in the array.
+'''
+
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        i = 0
+        j = len(nums) - 1
+
+        if nums[j] > nums[i]:
+            return nums[i]
+
+        while (i < j):
+            mid = (i + j) // 2
+
+            if nums[mid] > nums[j]:
+                i = mid + 1
+            else:
+                j = mid # this is just "mid" and NOT "mid - 1". Your mid elem may be your ans. If you do mid - 1, you are skipping mid elem all together
+
+        return nums[j]
+
+# time O(log n)
+# space O(1)
+
+'''
+33 Search in Rotated Sorted Array
+https://leetcode.com/problems/search-in-rotated-sorted-array/
+
+Given an integer array nums sorted in ascending order, and an integer target.
+
+Suppose that nums is rotated at some pivot unknown to you beforehand (i.e., [0,1,2,4,5,6,7] might become [4,5,6,7,0,1,2]).
+
+You should search for target in nums and if you found return its index, otherwise return -1
+'''
+
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        lo = 0
+        hi = len(nums) - 1
+
+        while (lo < hi):
+            mid = (lo + hi) // 2
+
+            if nums[mid] > nums[hi]:
+                lo = mid + 1
+            else:
+                hi = mid
+
+        rotation_point = lo
+
+        if target > nums[-1]:
+            lo = 0
+            hi = rotation_point - 1
+        else:
+            lo = rotation_point
+            hi = len(nums) - 1
+
+        mid = -1
+
+        while (lo <= hi):
+            mid = (lo + hi) // 2
+
+            if nums[mid] == target:
+                break
+            elif nums[mid] > target:
+                hi = mid - 1
+            else:
+                lo = mid + 1
+
+        if mid != -1 and nums[mid] == target:
+            return mid
+        else:
+            return -1
+
+# time O(log n)
+# space O(1)
+
+'''
+69. Sqrt(x)
+https://leetcode.com/problems/sqrtx/
+'''
+import math
+
+
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        if x == 0:
+            return 0
+
+        st = 1
+        en = x
+
+        while (True):
+            m = (st + en) / 2
+            sq_m = m * m
+
+            if (sq_m == x) or (math.ceil(sq_m) >= x and math.floor(sq_m) < x):
+                break
+
+            elif sq_m < x:
+                st = m
+
+            else:
+                en = m
+
+        m = math.floor(m)
+
+        if (m + 1) ** 2 == x:
+            return m + 1
+        else:
+            return m
+
+
+# time O(log n)
+# space O(1)
+
+# ------------------------------------------------------------- End of binary search block ---------------------------------------------------------------------------------------------
 
 
 
@@ -7448,6 +7415,31 @@ class Solution:
 # time: O(n)
 # space: O(n)
 
+# approach 2 - stack based
+    def kthSmallest(self, root: TreeNode, k: int) -> int:
+        stack = []
+        node = root
+
+        while (node): # It's just node NOT NODE.LEFT
+            stack.append(node)
+            node = node.left
+
+        while (True):
+            curr_node = stack.pop()
+            k -= 1
+
+            if k == 0:
+                return curr_node.val
+
+            elif curr_node.right:
+                node = curr_node.right
+
+                while (node): # It's just node NOT NODE.LEFT
+                    stack.append(node)
+                    node = node.left
+
+# time O(n) # this is worst case. In avg case, it performs better because there are no un wanted recursive calls. Avg case: O(H + K) refer solution tab leetcode
+# space O(n) # size of stack atmost height of tree. worst case left sided tree
 '''
 235. Lowest Common Ancestor of a Binary Search Tree
 https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
@@ -7584,6 +7576,93 @@ class Trie:
 # param_2 = obj.search(word)
 # param_3 = obj.startsWith(prefix)
 
+
+'''
+211. Design Add and Search Words Data Structure
+https://leetcode.com/problems/design-add-and-search-words-data-structure/
+'''
+
+
+class TrieNode:
+    def __init__(self, val):
+        self.val = val
+        self.next = {}
+        self.word_ending = False
+
+
+class WordDictionary:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.root = TrieNode(1)
+
+    def addWord(self, word: str) -> None:  # time O(M), M is len of word
+        """
+        Adds a word into the data structure.
+        """
+        i = 0
+        trie_node = self.root
+
+        while (i < len(word)):
+            ch = word[i]
+
+            if ch in trie_node.next:
+                trie_node = trie_node.next[ch]
+            else:
+                new_trie_node = TrieNode(ch)
+                trie_node.next[ch] = new_trie_node
+                trie_node = new_trie_node
+
+            i += 1
+
+        trie_node.word_ending = True # ************************************ IMPTNT ***********************************************************
+
+    def search(self, word: str) -> bool:  # time O(N), N is the num of words added till now. Space: O(M) M is len of search word
+        """
+        Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter.
+        """
+        trie_node = self.root
+        word_found = False
+
+        def dfs(trie_node, ind):
+            nonlocal word_found
+
+            if word_found:
+                return True
+
+            if ind == len(word):
+                if trie_node.word_ending:
+                    word_found = True
+                    return
+                else:
+                    return
+
+            ch = word[ind]
+
+            if ch == '.':
+                for next_key, next_node in trie_node.next.items():
+                    if word_found:  # This is just a practical performance enhancement
+                        return
+                    else:
+                        dfs(next_node, ind + 1)
+
+
+            else:
+                if trie_node.next.get(ch):
+                    return dfs(trie_node.next[ch], ind + 1)
+                else:
+                    return
+
+        dfs(trie_node, 0)
+        return word_found
+
+
+# Your WordDictionary object will be instantiated and called as such:
+# obj = WordDictionary()
+# obj.addWord(word)
+# param_2 = obj.search(word)
 # --------------------------------------------------------------------------- End of Tree block ---------------------------------------------------------------------------------------------
 
 
@@ -7880,6 +7959,198 @@ class Solution:
 # time O(n * m)
 # space O(n + m)
 
+'''
+48. Rotate Image
+https://leetcode.com/problems/rotate-image/
+'''
+
+
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        # start state
+        """ 
+        00 01 02
+        10 11 12
+        20 21 22
+        """
+
+        # end state
+        """
+        20 10 00
+        21 11 01
+        22 12 02
+        """
+
+        # reverse the rows
+        '''
+        02 01 00
+        12 11 10
+        22 21 20
+        '''
+        # interchange rows and cols
+        """
+        20 10 00
+        21 11 01
+        22 12 02
+        """
+        len_row = len_col = len(matrix)
+
+        for i in range(len_row):
+            for j in range(len_col):
+                if i < j:
+                    matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+
+            matrix[i].reverse()
+
+
+# time O(n ^ 2) where n is the num of rows OR the num of cols in matrix
+# space O(1)
+
+
+'''
+54 Spiral Matrix
+https://leetcode.com/problems/spiral-matrix/
+'''
+
+
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        '''
+        00 01 02
+        10 11 12
+        20 21 22
+        30 31 32
+        '''
+
+        # matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        if not matrix:
+            return []
+
+        m = len(matrix)
+        n = len(matrix[0])
+        total_unvisited_eles_in_mat = m * n
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        i = 0
+        j = -1  # ********************* NOTICE -1 ************
+        directions_ind = 0
+        op = []
+
+        while (total_unvisited_eles_in_mat > 0):
+            curr_dir = directions[directions_ind]
+            i += curr_dir[0]
+            j += curr_dir[1]
+
+            while (True):
+                op.append(matrix[i][j])
+                total_unvisited_eles_in_mat -= 1
+                matrix[i][j] = None
+
+                new_i = i + curr_dir[0]
+                new_j = j + curr_dir[1]
+
+                if (new_i < 0 or new_i >= m) or (new_j < 0 or new_j >= n) or matrix[new_i][new_j] == None:
+                    break  # *********************** condition to break out of loop is in if ***********************
+
+                i = new_i
+                j = new_j
+
+            directions_ind += 1
+
+            if directions_ind >= 4:
+                directions_ind = 0
+
+        return op
+
+# time O(n)
+# space O(1)
+
+
+'''
+73. Set Matrix Zeroes
+https://leetcode.com/problems/set-matrix-zeroes/
+'''
+
+class Solution:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        if not matrix:
+            return []
+
+        num_rows = len(matrix)
+        num_cols = len(matrix[0])
+
+        # appraoch 1 # time O(n ^ 2 * m ^ 2)
+
+
+        def set_row_zero(row_num):
+            for c in range(num_cols):
+                if matrix[row_num][c] != 0:
+                    matrix[row_num][c] = None
+
+        def set_col_zero(col_num):
+            for r in range(num_rows):
+                if matrix[r][col_num] != 0:
+                    matrix[r][col_num] = None
+
+        for i in range(num_rows):
+            for j in range(num_cols):
+                if matrix[i][j] == 0:
+                    set_row_zero(i)
+                    set_col_zero(j)
+
+        for i in range(num_rows):
+            for j in range(num_cols):
+                if matrix[i][j] == None:
+                    matrix[i][j] = 0
+
+
+        # approach 2 O(nm)
+        first_row_zero = False
+        first_col_zero = False
+
+        if 0 in matrix[0]:
+            first_row_zero = True
+
+        for i in range(num_rows):
+            if matrix[i][0] == 0:
+                first_col_zero = True
+
+        #print(first_col_zero)
+
+        for i in range(1, num_rows):
+            for j in range(1, num_cols):
+                if matrix[i][j] == 0:
+                    matrix[i][0] = 0
+                    matrix[0][j] = 0
+
+        #print(matrix)
+
+        for i in range(1, num_rows):
+            for j in range(1, num_cols):
+
+                if matrix[i][0] == 0 or matrix[0][j] == 0:
+                    matrix[i][j] = 0
+
+        if first_row_zero:
+            for j in range(num_cols):
+                matrix[0][j] = 0
+
+        if first_col_zero:
+            for i in range(num_rows):
+                matrix[i][0] = 0
+
+        #print(matrix)
+
+        #print(matrix)
+
+        return matrix
+
+# time O(nm)
 # ------------------------------------------------------------- END OF Matrix block -------------------------------------------------------------------------------------------
 
 
@@ -7938,6 +8209,65 @@ class Solution:
             res += prod_of_leaves
 
         return res
+
+
+'''
+42. Trapping Rain Water
+https://leetcode.com/problems/trapping-rain-water/solution/
+'''
+# See the solutions tab to understand stack approach. Start reading from Brute Force, Dynamic Prog and then read stack based approach to understand easily
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        # approach 1 time O(n) space O(1)
+        stack = []
+        total_water = 0
+
+        for i, h in enumerate(height):
+            while (stack and stack[-1][1] < h):
+                top_i, top_h = stack.pop()
+
+                if not stack:
+                    break
+
+                min_boundary_h = min(h, stack[-1][1])# ********************** imptnt, our right boundary is 'i', left boundary is stack[-1] *************
+                rect_h = min_boundary_h - top_h
+                w = i - stack[-1][0] - 1 # ********************** imptnt, our right boundary is 'i', left boundary is stack[-1] *************
+                total_water += rect_h * w
+
+            stack.append((i, h))
+
+        return total_water
+
+
+        # approach 2 # time O(n) space O(n)
+        total_water = 0
+        forward_array = []
+        backward_array = []
+
+        for h in height:
+            if forward_array == [] or forward_array[-1] < h:
+                forward_array.append(h)
+            else:
+                forward_array.append(forward_array[-1])
+
+        height.reverse()
+
+        for h in height:
+            if backward_array == [] or backward_array[-1] < h:
+                backward_array.append(h)
+            else:
+                backward_array.append(backward_array[-1])
+
+        height.reverse()
+        backward_array.reverse()
+
+        for i, h in enumerate(height):
+            height_of_water_at_index = min(forward_array[i], backward_array[i]) - h
+
+            if height_of_water_at_index > 0: total_water += height_of_water_at_index
+
+        return total_water
+
 
 
 # --------------------------------------------------------------- Backtracking Block ------------------------------------------------------------------------------------------------------------------------
@@ -8047,6 +8377,79 @@ class Solution:
 # time: O(k). k refers to the number of valid permutations.
 # space: O(n). visited array of size n is used. The depth of recursion tree will also go upto n. Here, n refers to the given integer n.
 
+
+'''
+47 Permutations II
+https://leetcode.com/problems/permutations-ii/
+'''
+from collections import defaultdict
+
+
+# approach 1
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        op = []
+        len_nums = len(nums)
+        visited_indices = set()
+
+        def helper(formed_list, list_len):
+            nonlocal len_nums, visited_indices, op
+
+            if list_len == len_nums:
+                op.append(formed_list)
+                return
+
+            curr_ind_visited_nums_set = set()
+
+            for i, n in enumerate(nums):
+                if n in curr_ind_visited_nums_set or i in visited_indices:
+                    continue
+
+                else:
+                    curr_ind_visited_nums_set.add(n)
+                    visited_indices.add(i)
+                    helper(formed_list + [n], list_len + 1)
+                    visited_indices.remove(i)
+
+        helper([], 0)
+        return op
+
+
+# time: O(k) k is the num of valid permutations
+# space: O(n ^ 2) at any point the max depth of recusriosn will be O(n) and at each level we will have a curr_ind_visited_nums_set (whose size is n). So, we can upper bound it by n ^ 2
+
+# approach 2 (Look at what we are iterating inside the recursive fn. We want a given number at a given index of the permuted array, to appear only once. So we form a dictionay whose keys are unique
+# numbers in the input and iterate through that to populate our permuted array)
+
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        results = []
+
+        def backtrack(comb, counter):
+            if len(comb) == len(nums):
+                # make a deep copy of the resulting permutation,
+                # since the permutation would be backtracked later.
+                results.append(list(comb))
+                return
+
+            for num in counter:
+                if counter[num] > 0:
+                    # add this number into the current combination
+                    comb.append(num)
+                    counter[num] -= 1
+                    # continue the exploration
+                    backtrack(comb, counter)
+                    # revert the choice for the next exploration
+                    comb.pop()
+                    counter[num] += 1
+
+        backtrack([], Counter(nums))
+
+        return results
+
+
+# time O(k)
+# space O(n)
 
 # --------------------------------------------------------------- End of Backtracking Block ---------------------------------------------------------------------------------------------------------------
 
@@ -8170,3 +8573,382 @@ class Solution:
 # space O(1)
 
 # --------------------------------------------------------------- End of Slinding window block ---------------------------------------------------------------------------------------------------------------
+
+
+
+# ------------------------------------------------------------------------ heaps block ---------------------------------------------------------------------------------------------------------------
+
+'''
+295 Find Median from Data Stream
+https://leetcode.com/problems/find-median-from-data-stream/
+'''
+import heapq
+
+
+class MedianFinder:
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.min_heap = []  # 10,11,12,13,14
+        self.min_heap_size = 0
+        self.max_heap = []  # -5,-4,-3,-2
+        self.max_heap_size = 0
+
+        heapq.heapify(self.max_heap)
+        heapq.heapify(self.min_heap)
+
+    def addNum(self, num: int) -> None:  # O(log n)
+        heapq.heappush(self.max_heap, -num)
+        top = heapq.heappop(self.max_heap)
+        heapq.heappush(self.min_heap, -top)
+        self.min_heap_size += 1
+
+        if self.max_heap_size == self.min_heap_size or self.max_heap_size + 1 == self.min_heap_size:
+            return
+        else:
+            top = heapq.heappop(self.min_heap)
+            heapq.heappush(self.max_heap, -1 * top)
+            self.min_heap_size -= 1
+            self.max_heap_size += 1
+
+        '''if self.min_heap == [] or num >= self.min_heap[0]:
+
+            if self.min_heap_size > self.max_heap_size:
+                top_ele = heapq.heappop(self.min_heap)
+                heapq.heappush(self.max_heap, -1 * top_ele)
+                self.max_heap_size += 1
+                self.min_heap_size -= 1
+
+            heapq.heappush(self.min_heap, num)
+            self.min_heap_size += 1
+
+        else:
+
+            if self.max_heap_size == self.min_heap_size:
+                if self.max_heap and num > -1 * self.max_heap[0]:
+                    ele_to_push_min_heap = num
+                else:
+                    ele_to_push_min_heap = -1 * heapq.heappop(self.max_heap)
+                    heapq.heappush(self.max_heap, -1 * num)
+
+                heapq.heappush(self.min_heap, ele_to_push_min_heap)
+                self.min_heap_size += 1
+
+            else:
+                heapq.heappush(self.max_heap, -1 * num)
+                self.max_heap_size += 1
+        '''
+
+    def findMedian(self) -> float:  # O(1)
+        if self.min_heap_size > self.max_heap_size:
+            return self.min_heap[0]
+        else:
+            mid_ele_1 = -1 * self.max_heap[0]
+            mid_ele_2 = self.min_heap[0]
+            return (mid_ele_1 + mid_ele_2) / 2
+
+# Your MedianFinder object will be instantiated and called as such:
+# obj = MedianFinder()
+# obj.addNum(num)
+# param_2 = obj.findMedian()
+
+'''
+DIP - Google
+
+Given a list of points and a number k, find the k closest points to the origin.
+
+def findClosestPointsOrigin(points, k):
+  # Fill this in.
+
+print (findClosestPointsOrigin([[1, 1], [3, 3], [2, 2], [4, 4], [-1, -1]], 3))
+# [[-1, -1], [1, 1], [2, 2]]
+'''
+
+'''
+Questions to ask the interviewer
+1 - What should I do if k is larger than the len of list
+2 - What should I do if k = 1 and there are 2 points on the graph with the same shortest distance from origin?
+'''
+import heapq
+import math
+
+points = [[-1, -1], [1, 1], [2, 2]]
+origin = (0,0)
+distance_list = []
+heapq.heapify(distance_list)
+k = 3
+
+for point in points:
+    x_dist = point[0] - origin[0]
+    y_dist = point[1] - origin[1]
+    dist_sq = x_dist ** 2 + y_dist ** 2
+    d = math.sqrt(dist_sq)
+    heapq.heappush(distance_list, (d,point[0], point[1]))
+
+while(k > 0 and distance_list):
+    print(heapq.heappop(distance_list))
+    k -= 1
+
+# time O(n) + k log n
+# space O(n)
+
+'''
+https://oss.1point3acres.cn/forum/202002/16/105235vyhn4ghwyfz9czzt.jpg!c
+'''
+import heapq
+
+s = 'ababyz'
+s_list = [char for char in s]
+heapq.heapify(s_list)
+prev_char = float('-inf')
+ss = [prev_char] # a b y z
+secondary_list = [] # a a b
+
+while(s_list):
+    prev_char = heapq.heappop(s_list)
+    ss.append(prev_char)
+
+    while(s_list and s_list[0] == prev_char):
+        secondary_list.append(heapq.heappop(s_list))
+
+heapq._heapify_max(secondary_list)
+
+while(secondary_list):
+    ss.append(heapq.heappop(secondary_list))
+
+ss = ''.join(ss[i] for i in range(1, len(ss)))
+print(ss)
+
+# time: n log n
+
+
+'''
+Amazon OA
+Max profit for Amazon basics
+'''
+
+
+def highest_profit(numSuppliers, inventory, order):
+    import heapq
+    heap = []
+    for item in inventory:
+        if item > 0:
+            heapq.heappush(heap, item * (-1))
+
+    profit = 0
+
+    while order > 0 and heap:
+
+        a = heapq.heappop(heap)
+        profit += a * (-1)
+        a += 1
+        if a:
+            heapq.heappush(heap, a)
+
+        order -= 1
+
+    return profit
+
+
+print
+'Highest Profit: ', highest_profit(2, [3, 5], 6)
+
+'''
+Amazon OA
+max_num_boxes
+'''
+
+import heapq
+
+
+def maxUnits(num, boxes, unitSize, unitsPerBox, truckSize):
+    heap = []
+
+    for i in range(len(boxes)):
+        units_per_box = unitsPerBox[i]
+        heapq.heappush(heap, (-units_per_box, boxes[i]))
+
+    ret = 0
+
+    while truckSize > 0 and heap:
+        curr_max = heapq.heappop(heap)
+        max_boxes = min(truckSize, curr_max[1])
+        truckSize -= max_boxes
+        ret += max_boxes * (curr_max[0] * -1)
+
+    return ret
+
+
+# test cases
+print(maxUnits(3, [1, 2, 3], 3, [3, 2, 1], 3))
+print(maxUnits(3, [2, 5, 3], 3, [3, 2, 1], 50))
+
+# --------------------------------------------------------------- End of Slinding window block ---------------------------------------------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------- Linked list block ---------------------------------------------------------------------------------------------------------------
+
+'''
+25. Reverse Nodes in k-Group
+https://leetcode.com/problems/reverse-nodes-in-k-group/
+'''
+class Solution:
+    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
+        prev_group_last_node = None
+        new_head = None
+
+        def helper_reverse(node, k_copy):
+            nonlocal prev_group_last_node, new_head
+
+            node_count = 0
+            st_node = node
+            prev_node = None
+
+            while(node and node_count < k):
+                node = node.next
+                node_count += 1
+
+            if node_count < k:
+                if prev_group_last_node: prev_group_last_node.next = st_node
+                return None
+
+            node = st_node
+
+            while (k_copy > 0 and node):
+                temp_node = node.next
+                node.next = prev_node
+                prev_node = node
+                node = temp_node
+                k_copy -= 1
+
+            if new_head == None:
+                new_head = prev_node
+
+            if prev_group_last_node:
+                prev_group_last_node.next = prev_node
+
+            prev_group_last_node = st_node
+            return node
+
+        node = head
+        new_head = None
+        node_num = 1
+        st_node_reverse_group = head
+
+        while (st_node_reverse_group):
+            st_node_reverse_group = helper_reverse(st_node_reverse_group, k)
+
+        return new_head
+
+# time O(n)
+# space O(1)
+
+# --------------------------------------------------------------- End of Linked list block ---------------------------------------------------------------------------------------------------------------
+
+
+# you can write to stdout for debugging purposes, e.g.
+# print("this is a debug message")
+
+"""
+Input
+-----
+voters -
+Voter arrival data (array of strings) sorted by arrival timestamp
+Format of each entry - "<arrivalTimestamp>,<votingTime>,<numChildren>,<toleranceTime>"
+
+numMachines -
+Number of voting machines
+
+queueSize -
+Size of the polling place's queue
+
+Output
+------
+Return an array of integers of size `numMachines+1` where the 0-th index represents the total number of voters who successfully cast votes and indices 1 to `numMachines` 
+represent the number of votes cast at each voting machine.
+"""
+
+'''import heapq
+from collections import deque
+
+def get_max_times_to_iterate(voters):
+    max_time_to_iterate = 0
+
+    for voter in voters:
+        voter_info = voter.split(',')
+        in_time = int(voter_info[0])
+        max_wait_time = in_time + int(voter_info[3])
+        max_time_to_iterate = max(max_time_to_iterate, max_wait_time)
+
+    return  max_time_to_iterate
+
+def solution(voters, numMachines, queueSize):
+    max_time_to_iterate = get_max_times_to_iterate(voters)
+    max_queue_size = queueSize
+    num_machines = numMachines
+    voters_data = deque(voters)
+    curr_queue_size = 0 # 0 2
+    vote_end_times = [] # (end_time, machine_id) (25, 0), (25, 1)
+    voters_queue = deque([]) # (voter_id, num_people, time_needed_to_vote) #[(18,2)]
+    max_waittimes_heap = []  # (max_wait_time, num_people, voter_id)
+    voters_left_due_to_time_expiry = set()
+    free_machines = [i for i in range(num_machines)]
+    heapq.heapify(vote_end_times)
+    heapq.heapify(max_waittimes_heap)
+    heapq.heapify(free_machines)
+    machine_vote_counts = deque([0 for i in range(num_machines)])
+    voter_id = 0
+
+
+    for curr_time in range(0, max_time_to_iterate + 2):
+        if curr_time == 60:
+            print()
+            pass
+        if voters_data == [] and voters_queue == []:
+            break
+        # num people who voted and are leaving
+        while(vote_end_times and vote_end_times[0][0] <= curr_time):
+            _, free_machine_id = heapq.heappop(vote_end_times)
+            heapq.heappush(free_machines, free_machine_id)
+
+            # num of people who are going to vote at curr time
+            while (voters_queue and free_machines):
+                voter_going_to_vote, space_to_be_freed, time_needed_to_vote = voters_queue.popleft()
+
+                if voter_going_to_vote not in voters_left_due_to_time_expiry:
+                    free_machine_id = heapq.heappop(free_machines)
+                    machine_vote_counts[free_machine_id] += 1
+                    heapq.heappush(vote_end_times, (curr_time + time_needed_to_vote, free_machine_id))
+
+        # num of people who are leaving the queue at curr time due to time expiry
+        while(max_waittimes_heap and max_waittimes_heap[0][0] <= curr_time):
+            _, num_people_left_queue, voter_id_to_remove = heapq.heappop(max_waittimes_heap)
+            curr_queue_size -= num_people_left_queue
+            voters_left_due_to_time_expiry.add(voter_id_to_remove)
+
+
+        # people who come in at curr time
+        while(voters_data and int(voters_data[0].split(',')[0]) == curr_time):
+            voter_info = voters_data.popleft().split(',')
+            in_time, time_needed_to_vote, num_children = int(voter_info[0]), int(voter_info[1]), int(voter_info[2])
+            total_space_needed = 1 + num_children
+            max_wait_time = in_time + int(voter_info[3])
+
+            if free_machines:
+                free_machine_id = heapq.heappop(free_machines)
+                machine_vote_counts[free_machine_id] += 1
+                heapq.heappush(vote_end_times, (curr_time + time_needed_to_vote, free_machine_id))
+
+            else:
+                if curr_queue_size + total_space_needed <= max_queue_size:
+                    heapq.heappush(max_waittimes_heap, (max_wait_time, total_space_needed, voter_id))
+                    voters_queue.append((voter_id, total_space_needed, time_needed_to_vote))
+                    curr_queue_size += total_space_needed
+
+            voter_id += 1
+
+    machine_vote_counts.appendleft(sum(machine_vote_counts))
+    return list(machine_vote_counts)
+'''
