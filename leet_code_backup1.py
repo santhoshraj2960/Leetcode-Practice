@@ -1,4 +1,20 @@
+In any interview (tech or behavioral) if you dont get the ans immediately, dont just bluff something. Tell the interviewer, pls give me 30s to a min for me refresh my memory for good examples
+Why internship now
 
+
+What is your strength
+Good planner. Stick to plan. First employee and learnt to plan things well. Total 5 weeks, first week this, second week need to finsih that and so on. More often than not I deliver on time.
+
+Have you assisted your co workwes
+DrumUp intern (integrate calendar - told him what tables he need to use, where the javascript functions are and which are the js files he needs to import them from and so on)
+
+What is something you want to improve on
+Delegate work to the team than taking most of the work. Reason, only engineer for close to year and half. Took all the responsibilities. I tend to think of the task as one big module. How do I
+split it into different tasks and assign it among others. Will it be easier if I do it by myself. More skeptical about how the delegated work will be done. Will it meet
+the standards I want it to meet. Will it align with the part Im developing. When I think about all these, I sometimes feel that I should take up the whole task
+
+Conflict
+Sophia. Release the product faster. Explain her what are the things at stake and who are the customers that will be impacted if we release the feature in 1 week itself. This could do more bad things
 
 1 good thing: I go off schedule very rarely.I plan things very well.
 Good planner: eg. Code jam. Leading a team of 6 and worked hard during the weekend so that the uncertainities surrounding how to get started
@@ -477,8 +493,8 @@ within an array like - You are given an array of integers.Find the maximum sum o
 
 # ------------------------------------------------------------------ Backtracking block -----------------------------------------------------------------------------------------------------------------------
 
-In backtracking problems, you could use a visited list to mark an index as visited (True) before your recursion starts and then change it False once that recursion is over. eg: 526 Beautiful Arrangement,
-Efficient Janitor
+permutations are backtracking problems and in backtracking problem, you could use a visited list to mark an index as visited (True) before your recursion starts and then change it False once that recursion
+is over. eg: 526 Beautiful Arrangement, Efficient Janitor
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -574,6 +590,9 @@ eg: 560. Subarray Sum Equals K
 
 # ------------------------------------------------------------------------------------------ Heaps block ------------------------------------------------------------------------------------------
 
+Some problems can be solved efficiently with the heap of two heaps (1 min heap and 1 max heap). This can be applied in problems when all you need is 2 numbers to get result. eg: Median from Data Stream
+See also how we complicated the result initially (the commented section)
+
 maxheaps do not exisit. If you want to use max heap, multiply the values by -1 and do heappop().
 - One issue with the above max heap approach is that it wont work properly on strings. Because '-item1' is still less than  '-item2'. Refer the below
 link on how to implement this.
@@ -613,6 +632,8 @@ heapq.heappop(listForTree)  # prints 15
 
 
 # ------------------------------------------------------------------------------------ trees block ---------------------------------------------------------------------------------------
+When using stack to simulate recursion, need to be careful when adding nodes to stack (esp in the while loop cond) eg:Kth Smallest Element in a BST (approach 2)
+When solving trie word problems, have word_ending flag at each trie node to indicate the end of a word. eg Design Add and Search Words Data Structure
 
 A rule of thumb that might work for most tree problems is to start thinking of a solution with 3 nodes in the tree and trying diff configurations with it. eg: Coin change (Muthu mock)
 
@@ -729,6 +750,14 @@ For some of the problems like 4.6( in -order successor) in CTCI, We need to come
 
 
 # ------------------------------------------------------------------ Matrix block ----------------------------------------------------------------------------------------------------------------------
+
+Some cases you might want to have your break statement in the loop instead of having a condition inside the loop statement. eg. spiral matrix
+
+Probs related to row and col transformations, try writing down your inital state and then final state in terms of rol and col nums. Then try
+    - reversing the rows
+    - interchanging row and col m[i][j] = m[j][i]
+    - Combination of the above. Or any other way to come to output state from input state
+eg: 48. Rotate Image
 
 When doing a bfs of dfs in matrix problems, NEED to keep track of VISTED verices to avoid infinite recursion. When we move only in 2 directions (right and down), we will process a vertex more than once.
 But in cases where we move in 4 directions, we will end up in infinite recursion if we do not keep track of visited verices
@@ -1102,9 +1131,11 @@ print animal  # ['cat', 'dog']
 In most stack based problem, we can follow a standard approach
 
 for ele in array:
-    while(stack[-1] condition curr_elem):
+    while(stack[-1] some_condition ele):
         ele_2 = stack.pop()
         # Do some calc
+        # We might need top elem in the stack once again 'stack[-1]' eg. 42. Trapping Rain Water
+
     stack.append(ele)
 
 New technique to solve problem:
@@ -1167,7 +1198,7 @@ Roblox interview again Cutting metal surplus
 bitmasks are a foolproof way of soving certain types of problems, especially permutations
  eg: subsets-https://leetcode.com/problems/subsets /
 
-Permuatation and combination https://www.mathsisfun.com/combinatorics/combinations-permutations.html
+Permutatation and combination https://www.mathsisfun.com/combinatorics/combinations-permutations.html
 
 I find it easier to calculate the time complexity by logical reasoning rather than simply
  going with the below formula.
@@ -1268,7 +1299,8 @@ https://stackify.com/oop-concept-for-beginners-what-is-encapsulation/
 Thread and Process example
 Celery gives the benefit spawning multiple threads for a worker. So, we had different number of threads running simultaneously for each worker. Each worker will operate on multiple queues at the same time.
 
-It they ask what is the benefit, you can say, threads share resources while processes do not. Threads are more economical than processes. eg: Lets we have only 2gb of ram and if a process is allotted all 2gb,
+It they ask what is the benefit, you can say, threads share resources while processes do not. Processes require resources exclusively for themselves and any other process that wants the same resources have to
+wait until the current process finishes its execution and releases the resources held. Threads are more economical than processes. eg: Lets we have only 2gb of ram and if a process is allotted all 2gb,
 then any other process we want to execute has to wait for the currently running process to complete.
 
 Whereas in case of threads, say we allotted the same 2gb of ram to a process, but we want several subtasks to execute simultaneously, we need not wait for the currently running process to end for these sub
