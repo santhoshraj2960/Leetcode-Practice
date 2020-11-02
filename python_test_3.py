@@ -818,6 +818,133 @@ class Solution:
 
 # time O(n)
 # space o(1)
+
+'''
+118 Pascal's Triangle
+https://leetcode.com/problems/pascals-triangle/
+'''
+
+
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        if numRows == 0:
+            return []
+
+        op = [[1]]
+
+        for row_num in range(1, numRows):
+            prev_row = op[row_num - 1]
+            len_prev_row = len(prev_row)
+            row_list = []
+
+            for col_num in range(len_prev_row + 1):
+                if col_num == 0 or col_num == len_prev_row:
+                    row_list.append(1)
+                else:
+                    num_to_append = prev_row[col_num - 1] + prev_row[col_num]
+                    row_list.append(num_to_append)
+
+            op.append(row_list)
+
+        return op
+
+
+# time O(n)
+# space O(1) we do not consider space occupied by the output variable
+
+
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+
+        # approach 1
+        nums_set = set(nums)
+        longest_seq_len = 0
+
+        for i in range(len(nums)):
+            n = m = nums[i]
+
+            # No need to visit a number more than once. nums_set keeps track of unvisited numbers
+            if n not in nums_set:
+                continue
+
+            curr_seq_len = 1
+
+            while (n + 1 in nums_set):
+                curr_seq_len += 1
+                nums_set.remove(n)
+                n += 1
+
+            while (m - 1 in nums_set):
+                curr_seq_len += 1
+                if m in nums_set: nums_set.remove(m)  # KEY PART TO NOTE. We dont do it in previous while loop. If the array has nums both lesser and greater than it, we would have removed the num in the
+                # prev while loop itself. So, trying to remove it once again will result in error
+                m -= 1
+
+            if n in nums_set:  # Finally we remove the greatest last num in the sequence. Performance Improvement
+                nums_set.remove(n)
+
+            if m in nums_set:  # Finally we remove the least smallest num in the sequence. Performance Improvement
+                nums_set.remove(m)
+
+            longest_seq_len = max(longest_seq_len, curr_seq_len)
+
+        return longest_seq_len
+
+        # approach 2 (same time and space compl. But more readable approach)
+        longest_streak = 0
+        num_set = set(nums)
+
+        for num in num_set:
+            if num - 1 not in num_set:
+                current_num = num
+                current_streak = 1
+
+                while current_num + 1 in num_set:
+                    current_num += 1
+                    current_streak += 1
+
+                longest_streak = max(longest_streak, current_streak)
+
+        return longest_streak
+
+
+# time O(n)
+# space O(n)
+
+'''
+88 Merge Sorted Array
+https://leetcode.com/problems/merge-sorted-array/
+'''
+
+
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        m -= 1
+        n -= 1
+        index = len(nums1) - 1
+
+        while (n > -1 and m > -1):
+            if nums1[m] > nums2[n]:
+                nums1[index] = nums1[m]
+                m -= 1
+            else:
+                nums1[index] = nums2[n]
+                n -= 1
+            index -= 1
+
+        i = index
+
+        while (n > -1):
+            nums1[i] = nums2[n]
+            i -= 1
+            n -= 1
+
+
+# time O(n + m)
+# space O(1)
 # ------------------------------------------------------------------- End of Array block ------------------------------------------------------------------------------
 
 
@@ -1865,7 +1992,59 @@ class Solution:
 # space O(m * n)
 
 
+'''
+140 Word Break II
+https://leetcode.com/problems/word-break-ii/solution/
+'''
 
+
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+        len_s = len(s)
+        word_set = set(wordDict)
+        memo = {}
+
+        def helper(i):
+            if i == len_s:
+                return ['']
+
+            if i in memo:
+                return memo[i]
+
+            # curr_word = s[i]
+            curr_word = ''
+            poss_vals = []
+
+            for j in range(i, len_s):
+                curr_word += s[j]
+
+                if curr_word in word_set:
+                    returned_sentances = helper(j + 1)
+
+                    if returned_sentances == None:
+                        continue
+
+                    for returned_sentance in returned_sentances:
+                        formed_sentance = (curr_word + ' ' + returned_sentance).strip()
+                        poss_vals.append(formed_sentance)
+
+            if not poss_vals: poss_vals = None
+
+            memo[i] = poss_vals
+
+            return memo[i]
+
+        return helper(0)
+
+
+# time: ((n^2 * 2^n) + w) the recursive fun will execute once for each index O(n). Inside the recursive fn, we iterate through the whole len of string O(n). Within each iteration, we again iterate
+# through the returned sentances O(X). What is X?
+# At some point in the recursion let w = [a, aa, aaa, aaaa]
+# s = 'aaaaa' and i = 1. The number of returned sentances would a mixture of pick and skip at each indices after 1.
+# eg. returned_sentances = [[a,a,a,a], [aa,a,a], [aaa,a], [aaaaa], [aa,aa],...] This is 2 ^ N
+# w is the time required to convert the wordDict into a set
+
+# space 2 ^ n + w, we might have 2 ^ n combination at most and we need to store all these in our memo
 
 
 
@@ -2592,7 +2771,66 @@ class Solution:
 
 
 '''
-200. Number of Islands
+130 Surrounded Regions
+https://leetcode.com/problems/surrounded-regions/
+'''
+
+
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        if not board:
+            return []
+
+        num_rows = len(board)
+        num_cols = len(board[0])
+        aux_board_1 = [[True] * num_cols for _ in range(num_rows)]
+        all_dirs = [(0, 1), (1, 0), (-1, 0), (0, -1)]
+        visited = set()
+
+        def do_dfs(cell):
+            aux_board_1[cell[0]][cell[1]] = False
+            visited.add(cell)
+
+            for dir in all_dirs:
+                new_row = cell[0] + dir[0]
+                new_col = cell[1] + dir[1]
+
+                if (new_row > -1) and (new_row < num_rows) and (new_col > -1) and (new_col < num_cols):
+                    if board[new_row][new_col] == 'O' and (new_row, new_col) not in visited:
+                        visited.add((new_row, new_col))
+                        do_dfs((new_row, new_col))
+
+        for row in range(num_rows):
+            if board[row][0] == 'O' and (row, 0) not in visited:
+                do_dfs((row, 0))
+
+            if board[row][num_cols - 1] == 'O' and (row, num_cols - 1) not in visited:
+                do_dfs((row, num_cols - 1))
+
+        for col in range(num_cols):
+            if board[0][col] == 'O' and (0, col) not in visited:
+                do_dfs((0, col))
+
+            if board[num_rows - 1][col] == 'O' and (num_rows - 1, col) not in visited:
+                do_dfs((num_rows - 1, col))
+
+        for row in range(num_rows):
+            for col in range(num_cols):
+                if aux_board_1[row][col] == True:
+                    board[row][col] = 'X'
+
+        return board
+
+
+# time O(N) where N is the number of cells in the matrix
+# space O(N)
+
+
+'''
+200 Number of Islands
 https://leetcode.com/problems/number-of-islands/
 '''
 
@@ -4128,7 +4366,7 @@ class Solution:
         while leftmost.left:
 
             # Iterate the "linked list" starting from the head
-            # node and using the next pointers, establish the 
+            # node and using the next pointers, establish the
             # corresponding links for the next level
             head = leftmost
             while head:
@@ -4174,6 +4412,52 @@ class Solution:
 
 # time O(n)
 # space O(n) If we don't take recursion stack or queue stack into account, then the space is O(1)
+
+
+'''
+173 Binary Search Tree Iterator
+https://leetcode.com/problems/binary-search-tree-iterator/
+'''
+
+
+class BSTIterator:
+
+    def __init__(self, root: TreeNode):
+        self.stack = []
+
+        while (root):
+            self.stack.append(root)
+            root = root.left
+
+    def next(self) -> int:  # time O(h) space O(h)
+        """
+        @return the next smallest number
+        """
+        next_smallest_node = self.stack.pop()
+
+        if next_smallest_node.right:
+            node = next_smallest_node.right
+
+            while (node):
+                self.stack.append(node)
+                node = node.left
+
+        return next_smallest_node.val
+
+    def hasNext(self) -> bool:  # time O(1)
+        """
+        @return whether we have a next smallest number
+        """
+        if self.stack:
+            return True
+
+
+# Your BSTIterator object will be instantiated and called as such:
+# obj = BSTIterator(root)
+# param_1 = obj.next()
+# param_2 = obj.hasNext()
+
+
 
 # --------------------------------------------------------------------------- End of Tree block ---------------------------------------------------------------------------------------------
 
@@ -4943,6 +5227,40 @@ print(min_len_subset)
 
 # time O(2 ^ n)
 # space O(n)
+
+
+'''
+131 Palindrome Partitioning
+https://leetcode.com/problems/palindrome-partitioning/
+'''
+
+
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        len_s = len(s)
+        op = []
+
+        def check_pal(i, j):  # O(n)
+            string_to_check = s[i:j]
+            rev_s = string_to_check[::-1]
+
+            return string_to_check == rev_s
+
+        def backtrack(i, curr_op):
+            if i == len_s:
+                op.append(curr_op)
+                return
+
+            for j in range(i + 1, len_s + 1):
+                if check_pal(i, j):
+                    backtrack(j, curr_op + [s[i:j]])
+
+        backtrack(0, [])
+
+        return op
+
+
+# time
 # --------------------------------------------------------------- End of Backtracking Block ---------------------------------------------------------------------------------------------------------------
 
 
@@ -5410,8 +5728,544 @@ class Solution:
 # time O(n)
 # space O(1)
 
+
+'''
+146 LRU Cache
+https://leetcode.com/problems/lru-cache/
+'''
+from collections import OrderedDict
+
+
+class DLLNode:
+    def __init__(self, val, key):
+        self.val = val
+        self.key = key
+        self.prev_node = None
+        self.next_node = None
+
+
+class LRUCache:
+    # time O(1) space O(capacity)
+    def __init__(self, capacity: int):
+        self.dll_head = DLLNode('head', 'head')
+        self.dll_tail = DLLNode('tail', 'tail')
+        self.dll_head.next_node = self.dll_tail
+        self.dll_tail.prev_node = self.dll_head
+        self.lru_cache = {}
+        self.capacity = capacity
+
+    def get(self, key: int) -> int:
+        if key not in self.lru_cache:
+            return -1
+
+        dll_node = self.lru_cache[key]
+        self.connect_prev_node_to_next_node(dll_node)
+        self.insert_node_at_tail(dll_node)
+        # self.print_nodes_dll()
+
+        return dll_node.val
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.lru_cache:
+            dll_node = self.lru_cache[key]
+            dll_node.val = value
+            self.connect_prev_node_to_next_node(dll_node)
+
+        else:
+            dll_node = DLLNode(value, key)
+            self.lru_cache[key] = dll_node
+            self.capacity -= 1  # KEY thing to note is once the size of the cache equals capacity of the cache for the current problem, it will never go less than the capacity because we don't
+            # explicitly delete a key from cache. We only delete when the size equals capacity
+            # print('\ncap = ', self.capacity)
+
+            if self.capacity < 0:
+                self.remove_node_at_head()
+                self.capacity = 0
+
+        self.insert_node_at_tail(dll_node)
+        # self.print_nodes_dll()
+
+    def connect_prev_node_to_next_node(self, dll_node):
+        prev_node = dll_node.prev_node
+        next_node = dll_node.next_node
+        prev_node.next_node = next_node
+        next_node.prev_node = prev_node
+
+    def remove_node_at_head(self):
+        least_used_node = self.dll_head.next_node
+        # print('lrun = ', least_used_node.key)
+        least_used_node.next_node.prev_node = self.dll_head
+        self.dll_head.next_node = least_used_node.next_node
+        self.lru_cache.pop(least_used_node.key)
+
+    def insert_node_at_tail(self, dll_node):
+        last_but_one_node = self.dll_tail.prev_node
+        last_but_one_node.next_node = dll_node
+        dll_node.prev_node = last_but_one_node
+        dll_node.next_node = self.dll_tail
+        self.dll_tail.prev_node = dll_node
+
+    def print_nodes_dll(self):
+        print('\n\n dll state')
+        node = self.dll_head
+
+        while (node):
+            print(node.key)
+            node = node.next_node
+            # print('prev = ', node.prev_node)
+
+        print('\n\n backward ')
+        node = self.dll_tail
+
+        while (node):
+            print(node.key)
+            node = node.prev_node
+
+    '''
+    # time O(1) # space O(capacity) 
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.lru_cache = OrderedDict()
+
+    def get(self, key: int) -> int:
+        if key in self.lru_cache:
+            self.lru_cache.move_to_end(key, last=False)
+            return self.lru_cache[key]
+
+        else: return -1
+
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.lru_cache:
+            self.lru_cache[key] = value
+
+        else:
+            if self.capacity == 0:
+                self.lru_cache.popitem()
+
+            else:
+                self.capacity -= 1
+
+            self.lru_cache[key] = value
+
+        self.lru_cache.move_to_end(key, last=False)
+
+        '''
+
+
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
 # --------------------------------------------------------------- End of Linked list block ---------------------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ------------------------------------------------------------- Math block ---------------------------------------------------------------------------------------------
+
+
+'''
+29. Divide Two Integers
+https://leetcode.com/problems/divide-two-integers/
+'''
+
+
+class Solution:
+    def divide(self, dividend: int, divisor: int) -> int:
+
+        if divisor < 0 and dividend < 0:
+            sign = 1
+            divisor *= -1
+            dividend *= -1
+
+        elif divisor < 0 or dividend < 0:
+            sign = -1
+
+            if divisor < 0:
+                divisor *= -1
+            else:
+                dividend *= -1
+
+        else:
+            sign = 1
+
+        quotient = 0
+        neg_limit = 2 ** 31
+        pos_limit = 2 ** 31 - 1
+        divisor_copy = divisor
+        mul_factor = 1
+
+        while (dividend >= divisor):
+
+            while (dividend >= divisor_copy and divisor_copy >= divisor):
+                dividend -= divisor_copy
+                quotient += mul_factor
+                divisor_copy <<= 2
+                mul_factor <<= 2
+
+                if (sign == -1 and quotient > neg_limit) or (sign == 1 and quotient > pos_limit):
+                    return pos_limit
+
+            divisor_copy >>= 2
+            mul_factor >>= 2
+
+        return (sign * quotient)
+
+
+# time O(log n)
+# space O(1)
+
+
+'''
+31 Next Permutation
+https://leetcode.com/problems/next-permutation/
+'''
+
+
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        # [1,2,7,8,6,3]
+        # [1,2,8,7,6,3]
+        # [1,2,8,3,6,7]
+
+        # [1,2,3,8,6,4] [4,6,8,3,2,1]
+        # [1,2,4,8,6,3] [3,6,8,4,2,1]
+        # [1,2,4,3,6,8] [8,6,3,4,2,1]
+
+        nums.reverse()
+        digit_to_be_replaced = None
+
+        for i, n in enumerate(nums):
+            if i == 0:
+                continue
+
+            if n < nums[i - 1]:
+                digit_to_be_replaced = i
+                break
+
+        if digit_to_be_replaced == None:
+            nums.sort()
+            return nums
+
+        least_num = float('+inf')
+        least_num_digit = None
+
+        for i in range(digit_to_be_replaced):
+            n = nums[i]
+
+            if n < least_num and n > nums[digit_to_be_replaced]:
+                least_num = n
+                least_num_digit = i
+
+        nums[least_num_digit], nums[digit_to_be_replaced] = nums[digit_to_be_replaced], nums[least_num_digit]
+
+        for i in range(digit_to_be_replaced):
+            if i >= (digit_to_be_replaced // 2):
+                break
+
+            nums[i], nums[digit_to_be_replaced - i - 1] = nums[digit_to_be_replaced - i - 1], nums[i]
+
+        nums.reverse()
+        return nums
+
+
+# time O(n)
+# space O(1)
+
+
+'''
+50 Pow(x, n)
+https://leetcode.com/problems/powx-n/
+'''
+
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+
+        # approach 1 time O(log n) space O(1)
+        neg_power = False
+
+        if n < 0:
+            neg_power = True
+            n = -1 * n
+
+        curr_power = 0
+        res = 1
+
+        while (curr_power < n):  # 5
+
+            aux_power = 1
+            rem_power_to_be_raised = n - curr_power  # 5 1
+            temp_res = x  # 2
+
+            while (aux_power << 1 <= rem_power_to_be_raised):  # 2<5 4<5 8<5(F) | 2 <= 1(F)
+                temp_res *= temp_res  # 4 16
+                aux_power <<= 1  # 2 4
+
+            curr_power += aux_power  # 4 | 5
+            res *= temp_res  # 16 32
+
+        if neg_power:
+            return (1 / res)
+        else:
+            return res
+
+        # approach 2 time O(log n) space O(log n)
+        def myPow(self, x: float, n: int) -> float:
+
+            neg_power = False
+
+            if n < 0:
+                neg_power = True
+                n = -1 * n
+
+            def fast_pow(x, n):
+                if n == 0:
+                    return 1
+
+                half_power_val = fast_pow(x, n // 2)
+
+                if n % 2 == 1:
+                    return half_power_val * half_power_val * x
+                else:
+                    return half_power_val * half_power_val
+
+            squared_val = fast_pow(x, n)
+
+            if neg_power:
+                return (1 / squared_val)
+            else:
+                return squared_val
+
+
+
+'''
+69 Sqrt(x)
+https://leetcode.com/problems/sqrtx/
+'''
+# The sol is in binary search block
+
+
+'''
+34 Find First and Last Position of Element in Sorted Array
+https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+'''
+
+
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        len_nums = len(nums)
+        st = 0
+        en = len_nums - 1
+
+        if not nums:
+            return [-1, -1]
+
+        if target > nums[-1] or target < nums[0]:
+            return [-1, -1]
+
+        # approach 1
+        while (st < en):
+            mid = (st + en) // 2
+            mid_ele = nums[mid]
+
+            if mid_ele < target:
+                st = mid + 1  # 3
+
+            elif mid_ele > target:
+                en = mid - 1
+
+            else:  # mid_ele == target
+                en = mid  # IMPORTANT EN = MID
+
+        left_most = en
+
+        if nums[left_most] != target:
+            return [-1, -1]
+
+        # print(left_most)
+
+        st = 0
+        en = len_nums - 1
+
+        while (st < en):
+            mid = math.ceil((st + en) / 2)  # IMPORTANT MATH.CEIL
+            mid_ele = nums[mid]
+
+            if mid_ele < target:
+                st = mid + 1
+
+            elif mid_ele > target:
+                en = mid - 1
+
+            else:  # mid_ele == target
+                st = mid  # IMPORTANT ST = MID
+
+        right_most = st
+
+        # print(right_most)
+
+        return [left_most, right_most]
+
+
+# time: O(log n)
+# space: O(1)
+
+'''
+67 Add Binary
+https://leetcode.com/problems/add-binary/
+'''
+from collections import deque
+
+
+class Solution:
+    def addBinary(self, a: str, b: str) -> str:
+        a = [char for char in a]
+        b = [char for char in b]
+        res = deque()
+        carry = '0'
+
+        while (a or b):
+            num_ones = 0
+
+            if a:
+                a_char = a.pop()
+            else:
+                a_char = '0'
+
+            if b:
+                b_char = b.pop()
+            else:
+                b_char = '0'
+
+            if a_char == '1':
+                num_ones += 1
+
+            if b_char == '1':
+                num_ones += 1
+
+            if carry == '1':
+                num_ones += 1
+
+            if num_ones == 0:
+                res.appendleft('0')
+                carry = '0'
+
+            elif num_ones == 1:
+                res.appendleft('1')
+                carry = '0'
+
+            elif num_ones == 2:
+                res.appendleft('0')
+                carry = '1'
+
+            else:
+                res.appendleft('1')
+                carry = '1'
+
+        if carry == '1':
+            res.appendleft(carry)
+
+        return ''.join(res)
+
+
+# time O(n)
+# space O(max(len(a), len(b)))
+
+# ------------------------------------------------------------------ End of math block ------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ------------------------------------------------------------------ Simulation qus block ------------------------------------------------------------------------------------------------
+'''
+158 Read N Characters Given Read4 II - Call multiple times
+https://leetcode.com/problems/read-n-characters-given-read4-ii-call-multiple-times/
+'''
+# The read4 API is already defined for you.
+# def read4(buf4: List[str]) -> int:
+from collections import deque
+
+
+class Solution:
+    def __init__(self):
+        self.temp_2 = deque()
+        self.len_buff = 0
+        self.end_of_file = False
+
+    def read(self, buf: List[str], n: int) -> int:
+        if not self.len_buff:
+            self.len_buff = len(buf)
+            self.end_of_file = False
+
+        while (len(self.temp_2) < n and self.end_of_file == False):
+            temp = [''] * self.len_buff
+
+            read4(temp)
+
+            if temp[0] == '':
+                self.end_of_file = True
+
+            for elem in temp:
+                if elem == '':
+                    break
+                else:
+                    self.temp_2.append(elem)
+
+        n = min(n, len(self.temp_2))
+        i = 0
+
+        for i in range(n):
+            buf[i] = self.temp_2[0]
+            self.temp_2.popleft()
+
+        for i in range(n, self.len_buff):
+            if buf[i] == '':
+                break
+
+            buf[i] = ''
+
+
+# time O(N) where N is the len of buf
+# space O(N) temp has the size of buf
+
+# ------------------------------------------------------------------ End of simulation qus block ------------------------------------------------------------------------------------------------
 
 
 
@@ -5540,3 +6394,174 @@ def solution(voters, numMachines, queueSize):
     machine_vote_counts.appendleft(sum(machine_vote_counts))
     return list(machine_vote_counts)
 '''
+
+# Redfin
+
+'''import requests
+r = requests.get('www.abc.com')
+r = requests.get('https://www.w3schools.com/python/module_requests.asp')
+d = {'a':1}
+r = requests.post('http://httpbin.org/post', json=d)
+#r = requests.post('http://httpbin.org/post', json={"key": "value"})
+print()'''
+
+from datetime import datetime
+from collections import defaultdict
+all_partners = [{
+      "date": "2021-04-01",
+      "partner": {
+        "name": "Acme Agency",
+        "country": "United States",
+        "status": "gold"
+      }
+    },
+    {
+      "date": "2021-04-13",
+      "partner": {
+        "name": "Acme Agency",
+        "country": "United States",
+        "status": "gold"
+      }
+    },
+    {
+      "date": "2021-04-22",
+      "partner": {
+        "name": "Acme Agency",
+        "country": "United States",
+        "status": "gold"
+      }
+    },
+    {
+      "date": "2021-04-01",
+      "partner": {
+        "name": "Richard's",
+        "country": "United States",
+        "status": "platinum"
+      }
+    },
+    {
+      "date": "2021-04-13",
+      "partner": {
+        "name": "Richard's",
+        "country": "United States",
+        "status": "platinum"
+      }
+    },
+    {
+      "date": "2021-03-29",
+      "partner": {
+        "name": "InfoTechies",
+        "country": "Canada",
+        "status": "gold"
+      }
+    },
+    {
+      "date": "2021-04-01",
+      "partner": {
+        "name": "InfoTechies",
+        "country": "Canada",
+        "status": "gold"
+      }
+    },
+    {
+      "date": "2021-04-01",
+      "partner": {
+        "name": "Fondue Palace",
+        "country": "United States",
+        "status": "silver"
+      }
+    },
+    {
+      "date": "2021-04--1",
+      "partner": {
+        "name": "Local News",
+        "country": "India",
+        "status": "gold"
+      }
+    }
+  ]
+
+import requests
+from utils import getURL
+from collections import defaultdict
+from datetime import datetime
+import json
+
+
+class DataParser:
+    def __init__(self):
+        self.country_wise_dict = defaultdict(
+            dict)  # dictionary that stores number of available vendors in a particular country on a particular date. eg:{'Canada': {'04-01-2020':2, '03-03-2020':5}}
+        self.result_dict = defaultdict(list)  # dictionary that stores the data to post to the postUrl
+
+    def parse_input(self, input_url):
+        # try block to check if the request succeeds or fails
+        try:
+            response_obj = requests.get(input_url)
+            availability_dict = response_obj.json()
+        except:
+            return None
+
+        # Checking if we have received a valid response
+        if (response_obj == None) or (response_obj.status_code != 200) or ('availability' not in availability_dict) or (
+                type(availability_dict['availability']) != list):
+            return None
+
+        all_partners = availability_dict['availability']
+
+        for partner in all_partners:
+            # Checking if the data we received has all the required information in it
+            if ('date' not in partner) or ('partner' not in partner) or ('country' not in partner['partner']):
+                return None
+
+            # Checking if the date value is in the format it is supposed to be
+            try:
+                available_date = datetime.strptime(partner['date'].strip(), '%Y-%m-%d')
+            except ValueError:
+                return None
+
+            country = partner['partner']['country']
+
+            if available_date in self.country_wise_dict[country]:
+                self.country_wise_dict[country][available_date] += 1
+            else:
+                self.country_wise_dict[country][available_date] = 1
+
+        for country, country_data in self.country_wise_dict.items():
+            available_dates_and_num_vendors = list(country_data.items())
+            available_dates_and_num_vendors.sort(key=lambda x: (-x[1],x[0]))
+
+            for date_and_partner_availability in available_dates_and_num_vendors[:2]:
+                date_obj = date_and_partner_availability[0]
+                month = date_obj.month
+                day = date_obj.day
+
+                if month < 10: month = '0' + str(month)
+
+                if day < 10: day = '0' + str(day)
+
+                date_str = '{}-{}-{}'.format(date_obj.year, month, day)
+                self.result_dict[country].append(date_str)
+
+        return self.result_dict
+
+
+if __name__ == "__main__":
+    fetchURL = getURL()
+    postURL = "https://api.filtered.ai/q/save-partner-availability"
+    dataparser = DataParser()
+    data_to_post = dataparser.parse_input(fetchURL)
+
+    if not data_to_post:
+        print('Error')
+    else:
+        response = requests.post(postURL, json=data_to_post)
+
+        if response and response.status_code == 200 and 'confirmationCode' in json.loads(response.text):
+            print(json.loads(response.text)['confirmationCode'])
+        else:
+            print('Error')
+    # Begin writing your code below.
+    # Output must be written to the console.
+
+    print("This is where your output will go.")
