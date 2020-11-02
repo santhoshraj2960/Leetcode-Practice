@@ -90,7 +90,7 @@ Remember coding is only the LAST STEP. before you start writing code,
 Thnik of an algorithm and run some extreme test cases on it in the paper or the computer screen before starting to write code. Or else, it could
 turn out to be disastorous. Remember Paypal interview? Remeber Unival tree problem?
 - Think out loud.Speak as_ you think because the interviewer will know your thought process.
-NEED TO WALK THE INTERVIEWER THROUGH THE PROCESS
+NEED TO WALK THE INTERVIEWER THROUGH THE PROCESS. Explain your algo with an example. A simple example test case. eg. Mathworks. string = 'ABCC', substr = 'ABC', res = 2
 
 - Explain your algo before starting to write code so you may know if you need to tweak your algo
 Get your algorithm precise and expalin it shortly to your interviewer before writing code
@@ -201,12 +201,8 @@ else
 Time O(V + E)
 Space O(V + E)
 
-When we do a BFS we need to be extra careful (than dfs). Remeber Number of Islands question. You may  end up queueing the same (x,y) corordinate multiple times. You have 2 options
- - make sure that the same coordinate is not queued multiple times by keeping a hashmap of the entries that you queue - "in_queue = set()" in Number of Islands problem
- - Whenever you pop an element from the queue, before doing any other steps, make sure that the coordinate is not visited before
-If you dont do one of the above you may get timelimit exceeded error
 
-Union find algorithm is used to detect if there exists a cycle in an UNDIRECTED graph. Some example problems where we used Union find are as follows
+Union find algorithm is used to detect if there exists a cycle in an UNDIRECTED graph. Some example problems where we used Union find are as follows: https://www.geeksforgeeks.org/union-find/
 1) Minimum-Spanning-Tree
 2) Graph Valid Tree (In approach 2 we have used Union Find algo. In approach 1 we have used DFS to check for cycle. Its ENOUGH to do dfs from ONE of the nodes in an undirected graph anc check if we visit
 a node more than once to detect cycles. Finally check if the seen dictionary is equal to the num of vertices). Whereas in directed graph we have to do DFS from every un-visited vertex
@@ -246,7 +242,7 @@ How to start'?' There is an interview tip for bit manipulation problems: if you 
 - https://leetcode.com/problems/sum-of-two-integers/
 
 Remeber to add "=" after your shift operator. x >>= 1 or x <<= 1. If you miss out "=" and do x << 1, it will not update x
-We can left shift by a certain number as well (ret = ret + (n & 1) << power) will left shift the least sig bit of n by power num of bits and add it to res. eg. 190 Reverse bitss
+We can left shift by a certain number as well (ret = ret + (n & 1) << power) will left shift the least significant bit of n, by power num of bits and add it to res. eg. 190 Reverse bitss
 
 Bit shift operation: - right shift divides a num by 2 - left shift multiplies a num by 2 eg: https://leetcode.com/problems/divide-two-integers/
 
@@ -272,12 +268,25 @@ x & 1 will give the least sig bit
 
 # ------------------------------------------------------------------------------------------ Binary Search block ------------------------------------------------------------------------------------------
 
+Finally found solution to the infinite loop problem
+- When mid = (st + en) // 2, YOU CAN HAVE en = mid and your while loop as whie(st < en), infinite loop will NOT occur
+- When mid = math.ceil((st + en) / 2), YOU CAN HAVE st = mid and your while loop as while(st < en), infinite loop will NOT occur
+Lets see why this happens. st = 4, en = 5, mid = (st + en) // 2 => mid = 4 and when st = mid, st = 4 (This is the inital state and will loop infinitely), but when en = mid, en = 4, loop will EXIT
+eg: 34 Find First and Last Position of Element in Sorted Array
+
+Try to understand whats happening. To get the left most occurnace, if you know the mid elem is equal to target, you DONT want to move st pointer because, st could be pointing to the left most index. So,
+you move en to the left so much so that it equals st (which could be the left most)
+
+
+Casaes where the list of nums you have to binary search upon, has a start and end limit, you dont have to form the array explicitly. eg. 69 Sqrt(x)
+
 Regular binary search where you do (mid + 1) and (mid - 1) will work only when all that you need to do is finding the position of an elem in sorted array (or finding if an elem exists in sorted array).
 The underly concept behind this is if you do (mid + 1 and mid - 1), you are assuming that mid_elem cannot be your ans. Eliminate mid by using (mid + 1 and mid - 1) only if you are cetain that mid is not
 your ans. In the above mentioned problem (finding pos of ele in sorted arr) you will have "if nums[mid] == target:" which checks and eliminates the poss of mid being the ans
+
 If your problem is to find
-- Rightmost occurance of an elem in a sorted array (move i to the right  if nums[mid] == target: i = mid + 1)
-- Leftmost occurance of an elem in a sorted array (move j to the left  if nums[mid] == target: j = mid - 1)
+- Rightmost occurance of an elem in a sorted array (move i to the right  if nums[mid] == target: st = mid) where, mid = math.ceil((st + en) / 2)
+- Leftmost occurance of an elem in a sorted array (move j to the left  if nums[mid] == target: en = mid) where, mid = (st + en) // 2
 - Find the first element greater than the target in a sorted array
 - Find minimum in a rotated sorted array
 We need to modify the low = mid - 1 part or high = mid + 1 part depending on the question. Read below for more details
@@ -327,33 +336,10 @@ while(lo < hi):
 	elif mid > target:
 		hi = mid - 1
 
-if you do not have "mid + 1" or "mid-1" and instead substitute just "mid", if the element is not there, in some edge cases it leads to inifinite loop. eg: seach a 2 d matrix This
- holds true only in the second approach, where you are only passing indices.When you are passing nums array itself as_ in approach 1 you have to do arr[st:mid] and arr[mid + 1:]
 
 If they are asking you to solve a problem in log n time and you have to calculate the len of the array, you should explicitly tell the
 interviewer that len(arr) takes O(n) time. Can I assume for this problem I will be given the array length so I dont have to calc it using len(arr)
 
-binary search variation - find the left or right most index of a number in a sorted list
-nums = [1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 7, 8, 9]
-target = 3
-
-def binary_search(st, en):
-    if st > en:
-        return st
-
-    mid = (st + en) // 2
-    mid_ele = nums[mid]
-
-    if mid_ele < target:
-        return binary_search(mid + 1, en)
-    elif mid_ele > target:
-        return binary_search(st, mid + 1)
-    elif mid_ele == target:
-        return binary_search(st, mid - 1) # To get the right most index, substitute by binary_search(mid + 1, en)
-    else:
-        return st
-
-print(binary_search(0, len(nums) - 1))
 
 biary search variation - in a sorted array find the first element greater than the target
 
@@ -372,8 +358,7 @@ while (st < en):
     elif running_sums_list[mid] < random_search_num:
         st = mid + 1
     else:
-        en = mid # Note this line, it's not mid - 1, it's just mid. In cases when mid element is the first elem greater than the target, this
-        # logic comes in handy
+        en = mid # Note this line, it's not mid - 1, it's just mid. In cases when mid element is the first elem greater than the target, this logic comes in handy
 
 print(st)
 
@@ -632,6 +617,10 @@ heapq.heappop(listForTree)  # prints 15
 
 
 # ------------------------------------------------------------------------------------ trees block ---------------------------------------------------------------------------------------
+
+1. For problems in which the operations we do on a tree are related to levels (i.e.horizontal levels) of the tree or finding if there is an edge bet 2 nodes, use BFS approach. eg. 101 Symmetric Tree.
+You JUST CANNOT USE DFS. Dfs cannot cover all the corner cases
+
 When using stack to simulate recursion, need to be careful when adding nodes to stack (esp in the while loop cond) eg:Kth Smallest Element in a BST (approach 2)
 When solving trie word problems, have word_ending flag at each trie node to indicate the end of a word. eg Design Add and Search Words Data Structure
 
@@ -733,7 +722,7 @@ the old node So, you have to do this
 application of this concept is in python_test.py in the foll problem "Given a binary tree, remove the nodes in which there is only 1 child"
 
 Graph/tree concepts:
-1. For problems in which the operations we do on a tree are related to levels (i.e.horizontal levels) of the tree or finding if there is an edge bet 2 nodes, use BFS approach
+
 2. For problems related to vertical levels(height) of tree try using dfs
 3. you can mostly solve any graph or tree problem using the following concepts:
 3.1.Recursion
@@ -751,6 +740,12 @@ For some of the problems like 4.6( in -order successor) in CTCI, We need to come
 
 # ------------------------------------------------------------------ Matrix block ----------------------------------------------------------------------------------------------------------------------
 
+For problems where moving out of the borders of the matrix play a crucial role, you have to do dfs from the each border cell. eg. 130 Surrounded Regions, 417 Pacific Atlantic Water Flow
+For some problems, we need to perform 2 bfs or 2 dfs to reach the solution. eg. 417 Pacific Atlantic Water Flow. We also needed 2 auxillary matrices to get verices which can reach pacific and atlantc.
+Finally we did an intersection on them to arrive at result.
+
+A slightly contrasting problem to the above mentioned 130 Surrounded Regions, 417 Pacific Atlantic Water Flow is 200 Number of Islands
+
 Some cases you might want to have your break statement in the loop instead of having a condition inside the loop statement. eg. spiral matrix
 
 Probs related to row and col transformations, try writing down your inital state and then final state in terms of rol and col nums. Then try
@@ -762,8 +757,6 @@ eg: 48. Rotate Image
 When doing a bfs of dfs in matrix problems, NEED to keep track of VISTED verices to avoid infinite recursion. When we move only in 2 directions (right and down), we will process a vertex more than once.
 But in cases where we move in 4 directions, we will end up in infinite recursion if we do not keep track of visited verices
 
-For some problems, we need to perform 2 bfs or 2 dfs to reach the solution. eg. 417 Pacific Atlantic Water Flow. We also needed 2 auxillary matrices to get verices which can reach pacific and atlantc.
-Finally we did an intersection on them to arrive at result.
 
 If you want to travel directions in matrix based problems, use something like this
 directions =[(0, 1), (1, 0), (0, -1), (-1, 0)]
@@ -795,6 +788,7 @@ One important thing in matrix problems is:
 
 
 # ------------------------------------------------------------------ Linkedlist block -----------------------------------------------------------------------------------------------------------------
+You can both insert and delete elems from a doubly linked list + dictionay combination in O(1) time eg: 146 LRU Cache
 
 Use fast ptr slow ptr approach to find loops in linked lists and problems like the below.
 https://medium.com/@k1ckap0l03/rabbit-and-turtle-algorithm-2c68dde598a2
@@ -813,6 +807,8 @@ The above approach would have made my while loop more complicated Later I came u
 
 
 # ------------------------------------------------------------------ Time and space comp block ---------------------------------------------------------------------------------------------------------
+
+time compl. are of the form n ** m if there are m possiblities from each of the input value in n.  Remember, 2 ** n in Algo class? recursion without memo. Another eg: 79 Word Search
 
 The time complexity is the length of your output because at the end of each recursion, we add the current output to the main output. Therefore we have had that many recursions that have happend.
 The space complexity will be the depth of the recursion tree. eg 526 Beautiful Arrangement
@@ -893,6 +889,39 @@ https://www.geeksforgeeks.org/binary-search-tree-set-2-delete /
 
 
 # ------------------------------------------------------------------------------------ Python specfics block --------------------------------------------------------------------------------------
+
+If you want to sort a dictionary by decending (in terms of values) and ascending (in terms of keys). Note this works only when the values are numbers
+a = datetime.strptime(a, '%Y-%m-%d')
+b = datetime.strptime(b, '%Y-%m-%d')
+tups = [(a,4),(b,4),(a,1), (a,2)]
+sorted(tups,key=lambda x:(-x[1],x[0]))) #menthod 1
+tups.sort(key=lambda x: (-x[1],x[0])) #method 2
+
+In bfs or dfs or matrix problems, when using visited to keep track of visited indices, have an 'if' statement to check whether the new row and new col you are going to discover is in visited or not. If you
+use a try expect block with visited like below, when row or col is -1, (valid index in python), you will ENCOUNTER TROUBLE
+eg matrix = [[1,2],
+             [3,4]]
+visited = set((0,0), (0,1), (1,0), (1,1))
+new_row = -1
+new_col = 0
+
+if (new_row, new_col) in visited: continue # matrix[-1][0] is a valid statement in Python and even though the cell (1,0) whose value is 3 is visited, since (-1,0) is not in visited, it will visit the same
+# cell once again
+else: dfs(new_row, new_col) # ******************* trouble *****************
+
+for d in all_dirs:
+    try:
+        new_row = cell[0] + d[0]
+        new_col = cell[1] + d[1]
+        tup = (new_row, new_col)
+
+        if board[new_row][new_col] == next_char and self.word_found == False and tup not in visited:
+            visited.add(tup)
+            dfs(tup, word_ind + 1)
+            visited.remove(tup)
+
+    except IndexError:
+        pass
 
 intervals = sorted(intervals, key=itemgetter(1)) # sort list of tuples by 2nd element # method 1 works on the latest version of python
 data.sort(key=lambda x: x[1]) # sort list of tuples by 2nd element # method 2 works on all versions of python
