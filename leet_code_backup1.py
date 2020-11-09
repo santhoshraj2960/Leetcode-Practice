@@ -4,6 +4,7 @@ Why internship now
 
 What is your strength
 Good planner. Stick to plan. First employee and learnt to plan things well. Total 5 weeks, first week this, second week need to finsih that and so on. More often than not I deliver on time.
+Put in extra than others in the team
 
 Have you assisted your co workwes
 DrumUp intern (integrate calendar - told him what tables he need to use, where the javascript functions are and which are the js files he needs to import them from and so on)
@@ -14,6 +15,7 @@ split it into different tasks and assign it among others. Will it be easier if I
 the standards I want it to meet. Will it align with the part Im developing. When I think about all these, I sometimes feel that I should take up the whole task
 
 Conflict
+Hackathin andrea - UI designer- Wanted to do something that cannot be accomplished in 3 days. Made her understand that from a development stand point, this cannot be done
 Sophia. Release the product faster. Explain her what are the things at stake and who are the customers that will be impacted if we release the feature in 1 week itself. This could do more bad things
 
 1 good thing: I go off schedule very rarely.I plan things very well.
@@ -43,9 +45,7 @@ and sum of amount involved in those transactions for the current month. Based on
 Time when deadline not met:
 Apache server on the day before the code jam, problem with static files. Though made sure I was able to run Django hello world on apache the 
 prev weekend, this static file issue was unexpected. So, had to revert back to django server for demo purpose.
-Conflict with the team:
-Andrea - Designer No coding exp:
-Wanted to do something that cannot be accomplished in 3 days. Made her understand that from a development stand point, this cannot be done
+
 
 Add your idea of determining business for advisers through demographics for_advisors in resume. 
 Other Coding websites: 
@@ -72,8 +72,8 @@ Distribute data storage and distributed query execution are a problem(yet possib
 https://blog.yugabyte.com/what-is -distributed-sql/
 
 When sql and nosql? 
-Need acid(Bank database)-sql otherwise nosql(web crawler database, where data consistecy
-is not the highest priority)
+Need acid(Bank database)-sql otherwise nosql(web crawler database, where data consistecy is not the highest priority)
+acid - https://www.essentialsql.com/sql-acid-database-properties-explained/
 
 # ----------------------------------------------------------- General Interview Points block ---------------------------------------------------------------------------------------------------------
 
@@ -104,23 +104,19 @@ Singly linked list median finding when only 1 node in list Handle them before yo
 https://www.youtube.com/watch?v=7HgsS8bRvjo - Unival trees question, Remember how you missed the edge case?
 When the given problem is not hard, the interviewer is going to be looking heavily at how careful you are. Did you check for error conditions?
 
-Behavioral qustions for which we need correct answers? Have you ever had conflict and_if 
-so, how did you handle it? Sophia example, 
+Behavioral qustions for which we need correct answers?
 https://www.youtube.com/watch?v=J49el9Fl8lM&t=680s 
 sat down and weigh the pros and cons.If unable to solve, escalete to manager
  If you didnt meet a deadline, wht would you do?
 See also the top of the file for answers
 
-In design based questions, make use of api gateway( or) load balancer which distributes t
-he load to different servers(n) based on the amount of cpu usage.Make use of n queues, th
-e processes running on each of the server will pick the tasks from the respective
-queues. We also need to learn about the task scheduling algorithms like round-robin, etc
+In design based questions, make use of api gateway( or) load balancer which distributes the load to different servers(n) based on the amount of cpu usage.Make use of n queues, th
+e processes running on each of the server will pick the tasks from the respective queues. We also need to learn about the task scheduling algorithms like round-robin, etc
 
 Mock Kevin youtubers presentation of interview questions especially for recursion problems. Remembere muth mock interview coins prob
-1 - Magic recursion function - then base case - then return value - then recursive calls - finally any logic needed inide recursion
+1 - Magic recursion function - then base case - then return value - then recursive calls - finally any logic needed inside recursion
 
-Be sure to return your answer if you are using a func at the end of the func. Be sure to 
-increment 'i' in while (i < len(something)) loops.
+Be sure to return your answer if you are using a func at the end of the func. Be sure to  increment 'i' in while (i < len(something)) loops.
 
 #Common questions to ask before coding for problems like
 "Given a set of numbers(integers, values)", the first question to ask the interviewer is
@@ -148,15 +144,15 @@ Try to avoid at all costs using dictionary or something else to solve topologica
 https://aonecode.com/facebook-coding-interview-questions/Minimum-Time-to-Complete-Tasks
 
 We can sometimes use set for solving a problem.Refer Maximum Length of a Concatenated String with Unique Characters.See link under runtime
-set Union - s | t -> O(len(s) + len(t))
-set intersection - s & t -> O(min(len(s), len(t))
+set Union - s | t -> O(len(s) + len(t)) - O(n)
+set intersection - s & t -> O(min(len(s), len(t)) - O(n)
 
 Need to be more careful when reading a question.eg. 1239 leetcode.
 The question asks "Maximum Length of a Concatenated String with_Unique Characters" and not "Maximum Length of a Concatenated CONTINUOS String with_Unique Characters"
 another eg: Alien Dictionary https://leetcode.com/problems/alien-dictionary/. Only the words are ordered. the chars inside each word are not ordered
 
 When handling questins like "Is subtree of another tree", we got to be a bit more careful when doing the solution by tree traversal algos and storing the values in a list and che
-cking if child list is sublist of parent list.We need to store the none val of left and right child of leaf nodes in the list for correct results.
+cking if child list is sublist of parent list.We need to store the "none" val of left and right child of leaf nodes in the list for correct results.
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -479,7 +475,7 @@ within an array like - You are given an array of integers.Find the maximum sum o
 # ------------------------------------------------------------------ Backtracking block -----------------------------------------------------------------------------------------------------------------------
 
 permutations are backtracking problems and in backtracking problem, you could use a visited list to mark an index as visited (True) before your recursion starts and then change it False once that recursion
-is over. eg: 526 Beautiful Arrangement, Efficient Janitor
+call is over and is about to return. eg: 526 Beautiful Arrangement, Efficient Janitor
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -515,7 +511,7 @@ Need to be careful when using quicksort. How to buid the array On which should y
 quick select on should have 2 occurances of that frequency. eg: [4,1,-1,2,-1,2,3]. Here (-1 and 2) appears 2 times whereaas 4,1,3 appears 3 times. So, the freq_array on which you will do quickselect
 should be [1,1,1,2,2]
 
-Refer EPI 5.5. Easiest way - O(n) Remove duplicates from sorted array
+Refer EPI 5.5. Easiest way - O(n) Remove duplicates from sorted array (using a ptr 'i' to traverse and 'write_ptr' to keep track of the index to write non repeating value)
 
 a = [1,2,3]
 b = a # shallow copy
@@ -560,6 +556,7 @@ https://leetcode.com/problems/random-pick-with-weight/
 # If you are getting confused with logic behing running sums when implementing in interview. Think of the following simple ex
 nums = [2,3]
 k = 5
+running_sums = {0:0, 2:1, 5:2} # the value for keys 2 and 5 are 1 (0 + 1 = (index of 2) + 1) and 2 respectively
 Think of running sums approach as_ one of the approaches to solving a prob You are given an array of integers. eg: You are given an array of integers, and an integer K.Return the
 subarray. One important thing in runnong sums approach is to have key {0:1} in your dictionary. Remember mock interview with chen (facebook qus)
 
@@ -617,6 +614,10 @@ heapq.heappop(listForTree)  # prints 15
 
 
 # ------------------------------------------------------------------------------------ trees block ---------------------------------------------------------------------------------------
+
+When the problem asks you to deal with BST, (eg: lowest common ancesstor of bst or 270. Closest Binary Search Tree Value) you can simply use while loop. Try not to use recursion as it saves stack space.
+
+Space compl for dfs of a tree is O(h). Space compl for bfs a BINARY tree is O(n) because all the nodes in the last level will be in the queue. No of nodes in last level is (N/2 - 1)
 
 1. For problems in which the operations we do on a tree are related to levels (i.e.horizontal levels) of the tree or finding if there is an edge bet 2 nodes, use BFS approach. eg. 101 Symmetric Tree.
 You JUST CANNOT USE DFS. Dfs cannot cover all the corner cases
@@ -740,6 +741,11 @@ For some of the problems like 4.6( in -order successor) in CTCI, We need to come
 
 # ------------------------------------------------------------------ Matrix block ----------------------------------------------------------------------------------------------------------------------
 
+pycharm debugger causes issues when checking following condition. Heve the following if statemet inside a funtin def is_valid(row, col): and use "step over" in the debugger
+if row > -1 and row < num_rows and col > -1 and col < num_cols:
+
+When you want to interchange rows and cols You should interchange rows and cols one for cells above the main diagonal. Because, if you do it 1 more time, matrix will return to its original state
+
 For problems where moving out of the borders of the matrix play a crucial role, you have to do dfs from the each border cell. eg. 130 Surrounded Regions, 417 Pacific Atlantic Water Flow
 For some problems, we need to perform 2 bfs or 2 dfs to reach the solution. eg. 417 Pacific Atlantic Water Flow. We also needed 2 auxillary matrices to get verices which can reach pacific and atlantc.
 Finally we did an intersection on them to arrive at result.
@@ -752,7 +758,7 @@ Probs related to row and col transformations, try writing down your inital state
     - reversing the rows
     - interchanging row and col m[i][j] = m[j][i]
     - Combination of the above. Or any other way to come to output state from input state
-eg: 48. Rotate Image
+eg: 48. Rotate Image eg: https://leetcode.com/problems/diagonal-traverse/solution/ (see solutions tab approach1)
 
 When doing a bfs of dfs in matrix problems, NEED to keep track of VISTED verices to avoid infinite recursion. When we move only in 2 directions (right and down), we will process a vertex more than once.
 But in cases where we move in 4 directions, we will end up in infinite recursion if we do not keep track of visited verices
@@ -856,7 +862,6 @@ https://aonecode.com/google-coding-interview-questions/Word-Break-Combinations
 Lists or arrays
 pop() is O(1), but pop(index) is O(n)(since the whole rest of the list has to be shifted).
 https://wiki.python.org/moin/TimeComplexity
-Except push, pop, get, set and len, all list operations are non constant(i.e not O(1))
 If you have the possibility to use try catch instead of checking for the len of list, you should use it. time comes down from o(n) to O(1)
 If you slice a list like
 l[0:i] + l[i + 1:], its O(h) + O(k), where h and k are len of the slices.But s + k = n-1. So we have to consider this slice_as O(n).
@@ -889,6 +894,7 @@ https://www.geeksforgeeks.org/binary-search-tree-set-2-delete /
 
 
 # ------------------------------------------------------------------------------------ Python specfics block --------------------------------------------------------------------------------------
+Strange scenario: Python debugger not working when "while i > -1 or j > -1" but works when "i >= 0 or j >= 0"
 
 If you want to sort a dictionary by decending (in terms of values) and ascending (in terms of keys). Note this works only when the values are numbers
 a = datetime.strptime(a, '%Y-%m-%d')
@@ -896,6 +902,10 @@ b = datetime.strptime(b, '%Y-%m-%d')
 tups = [(a,4),(b,4),(a,1), (a,2)]
 sorted(tups,key=lambda x:(-x[1],x[0]))) #menthod 1
 tups.sort(key=lambda x: (-x[1],x[0])) #method 2
+
+data.sort(key=lambda x: x[1]) # sort list of tuples by 2nd element # method 2 works on all versions of python
+If we use sorted function and assign the result to the same variable, we are not using additional space. my_list = sorted(my_list) # space O(1)
+
 
 In bfs or dfs or matrix problems, when using visited to keep track of visited indices, have an 'if' statement to check whether the new row and new col you are going to discover is in visited or not. If you
 use a try expect block with visited like below, when row or col is -1, (valid index in python), you will ENCOUNTER TROUBLE
@@ -923,9 +933,6 @@ for d in all_dirs:
     except IndexError:
         pass
 
-intervals = sorted(intervals, key=itemgetter(1)) # sort list of tuples by 2nd element # method 1 works on the latest version of python
-data.sort(key=lambda x: x[1]) # sort list of tuples by 2nd element # method 2 works on all versions of python
-If we use sorted function and assign the result to the same variable, we are not using additional space. my_list = sorted(my_list) # space O(1)
 
 Need to use while loop if possible than for loop (expecially when the problem involves range. eg: for i in range(min, max)). ALWAYS FORGETTING TO PUT MAX + 1. Roblox Surplus metal OA and amazon OA
 
@@ -1116,7 +1123,7 @@ if __name__ == '__main__': # what does this mean
 https://stackoverflow.com/questions/419163/what-does-if -name-main-do
 
 
-Zip for creating dict of 2 linked lists
+Zip for creating list of tuples of 2  lists
 https://realpython.com/python-zip-function
 
 OrderedDict # Python 3 Stores the keys in the order we save them
@@ -1131,6 +1138,7 @@ list(d.keys())  # ['a', 'c', 'd', 'e', 'b']
 d.move_to_end('b', last=False) # O(1) operation IMPORTANT
 print ''.join(d.keys())  # 'bacde'
 d.pop('key')  # remove a key from dict
+self.lru_cache.popitem() # to pops the last key from the right
 
 d[b] = 1
 d[a] = 2
@@ -1216,6 +1224,15 @@ while (curr_ele >= inp[stack[-1]])
 
 # -------------------------------------------------------------------------------------- Math Block -------------------------------------------------------------------------------------------
 
+Adding 2 nums digit by digit (either binary or decimal), need to add remaining carry after the end of loop. eg: 67 Add Binary
+
+distance between origin and any point (a,b) in a graph is equal to sqrt((a - 0) ** 2 + (b - 0) ** 2)
+
+Division and Multiplication takes equal precendence when evaluating a string. + and - takes equal presedence as well. eg: 227. Basic Calculator II
+a = eval('3 + 2') # a = 6
+
+For questions like Integer to English Words, Roman to Integer, Integer to Roman, break down the problem into all possibilities (cases) and then solve the prob case by case. eg. Integer to English Words
+
 Number system conversions https://www.rapidtables.com/convert/number/hex-to-decimal.html
 
 Math fact a composite number must have a factor less than the square root of that number.
@@ -1229,11 +1246,11 @@ bitmasks are a foolproof way of soving certain types of problems, especially per
 
 Permutatation and combination https://www.mathsisfun.com/combinatorics/combinations-permutations.html
 
-I find it easier to calculate the time complexity by logical reasoning rather than simply
- going with the below formula.
+I find it easier to calculate the time complexity by logical reasoning rather than simply going with the below formula.
 
  eg: https://leetcode.com/problems/subsets/solution/
 
+See the sol tab of leetcode for below probs
 (see approach 2 on LC), Restore IP addresses. Note there is a difference between subsets(1 st problem above) and
  https://aonecode.com/google-coding-interview-questions/Word-Break-Combinations
 because the order the each number occurs matter whereas in the word break combinations problem the words can occur in any order.Calculation run times of these 2 probs need
@@ -1300,6 +1317,11 @@ function is a member function that you expect to be redefined in derived classes
 a virtual function for that object and_ execute the derived class_'s' version of the function. When the virtual fun in base class_ or the function in the derived class_ has different
 arguments, the purpose of virtual functions is lost.It becomes method overloading
 
+what is the use of virtual functions
+You have a generic implementaion of a function abc (virtual) in the base class. Suppose you have 100 derived classes and 50 of them has a custom implementation of function abc. You want this custom
+implementation of abc to be called whenever it is available. Whenever a custom implementation is not available, you want the generic implementaion to be called.
+https://stackoverflow.com/questions/2391679/why-do-we-need-virtual-functions-in-c
+
 Virtual destructors Deleting a derived class_object using a pointer to a base_class, that has a non-virtual destructor results in undefined behavior.To correct this situation, the
 base_class should be defined_with a virtual destructor.
 https://www.geeksforgeeks.org/virtual-destructor/
@@ -1308,15 +1330,19 @@ https://www.geeksforgeeks.org/virtual-destructor/
 https://medium.com/@shanikae/polymorphism-explained-simply-7294c8deeef7
 Method overriding is dynamic Polymorphism Method overloading is static Polymorphism
 
-Diff bet Abstraction and enacapsulation:
+Diff bet Abstraction and enacapsulation: Both are hiding of something (abstraction - logic; encapsulation - logic and data) but the purpose for which we hide differs
 https://javarevisited.blogspot.com/2017/04/difference-between-abstraction-and-encapsulation-in-java-oop.html
 
+Encapsulation in Java is a mechanism to wrap up variables(data) and methods(code) together as a single unit. It is the process of hiding information details and PROTECTING data and behavior of the object.
+You define how a class should behave and how an object should behave and what class variables can be changed by what objects and what class variables can never be modified by objects and can only be modified
+by member fubctions. By doing this you are encapsulating the data and the logic in a single unit 'class'
 In encapsulation the motive is to secure data by declaring it private. Bank account balance, b_a_b-should be updated only by transaction method. The variable b_a_b should be declared private so that no
 other classes other than the current _class can update this variable. If a variable is declared as private, only the class methods can access and modify it.
 https://www.guru99.com/java-oops-encapsulation.html
 
 On the other hand Abstraction is_ hiding the underlying functionality as_ its not needed for the person who is_ using it.Eg-person using hashmap need not_ know the underlying implementaion of how its done
-(using tree or graph or bst or stack).He needs to know to just how to use it and thats all.
+(using tree or graph or bst or stack).He needs to know to just how to use it and thats all. Another eg of abstraction is api end points. Someone using an api endpoint only needs to know how to call the
+endpoint and what to expect in return. He does not need to know how the endpoint processes the input and gives the output
 
 Abstraction: Hiding undelying functionality of the class_ to make sure the person using the class_ doesnt get perplexed about the implementaion
 https://stackify.com/oop-concept-abstraction/
@@ -1327,6 +1353,8 @@ https://stackify.com/oop-concept-for-beginners-what-is-encapsulation/
 
 Thread and Process example
 Celery gives the benefit spawning multiple threads for a worker. So, we had different number of threads running simultaneously for each worker. Each worker will operate on multiple queues at the same time.
+Each celery worker is an individual process. So, each worker was assigned a speific amount (cores) of cpu. Whereas, each worker spawned multiple threads and all threads belonging to a particular worker
+share the resources allocated to that particular worker
 
 It they ask what is the benefit, you can say, threads share resources while processes do not. Processes require resources exclusively for themselves and any other process that wants the same resources have to
 wait until the current process finishes its execution and releases the resources held. Threads are more economical than processes. eg: Lets we have only 2gb of ram and if a process is allotted all 2gb,
@@ -1337,8 +1365,8 @@ tasks to start. These sub tasks can take place using threads originating from th
 
 So which one is better? Well, the answer depends on the use case.
 For a word processor, we need spell check, alignment and other formatting to work simultaneously as we are typing. So, threads are benefitial in this case.
-For a brower, lets say chrome, each tab has a webpage. Any issue in the webpage displayed in tab 1 should not impact the webpage displayed on tab 2. So, we need seperate processes for each tab to keep
-each browser tabs independent of the other.
+For a brower, lets say chrome, each tab has a webpage. Any issues in the webpage displayed in tab 1 should not impact the webpage displayed on tab 2. So, we need seperate processes for each tab to keep
+each browser tabs independent of the other. eg of a webpage issue could be an infinite loop
 In general, if we want two tasks to function independetly of one another, rather lets me put it this way, we have two tasks and we dont want failure of task 1 to have any impace on task 2, then we use process
 Whereas, If a task has several subtasks, each of which has to happen simulateously for the task to successfully complete, we can opt for threads
 
@@ -1403,5 +1431,3 @@ r you have to pick the element or not and move fwd - eg: Minimum Cost Tree From 
 
 - Try to make use of every single detail in the question.You can solve the problem easily and in a better way.There could be some hints at the end of the question like this one(compare strings)
 https://leetcode.com/discuss/interview-question/352458 / See the python ans to understand how he has made use of the clue in the question
-
-
