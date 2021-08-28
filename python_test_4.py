@@ -1,3 +1,64 @@
+Binary search tips:
+
+Use st < en as condition in your while loop as much as possible. Try not to use st <= en as it will lead to unwanted complications
+
+1)
+mid = (st + en) // 2 => mid = math.floor((st + en) / 2)
+You can have "en = mid" in any of your if or elif or else conditions and you code WILL NOT GO INTO INFINITE LOOP
+Reason is math.floor =>
+eg:
+
+while st < en
+st = 4
+en = 5
+mid = (4 + 5) // 2 => 4
+if(...): en = mid => en = 4
+
+2)
+For the same eg above. if you have
+st = mid
+in any of your if or elif or else. There is a possibility of infinite loop when
+
+st = 4
+en = 5
+mid = (4 + 5) // 2 => 4
+if(...): st = mid => st = 4 (**DANGER** Infinite loop)
+
+Solution => mid = math.ceil((st + en) / 2) => math.ceil((4 + 5) / 2) => 5
+st = 4
+en = 5
+mid = math.ceil((4 + 5) / 2) => 5
+if(...): st = mid => st = 5 (**SOLUTION** loop terminates as st = 5 and en = 5)
+
+3)
+If you want to get the last occurance of an element in a sorted array
+
+mid = (st + en) // 2
+
+if mid_ele == target:
+    en = mid # You don't want to loose track of the index mid because the index mid could be the right most index holding value target
+
+conversely
+If you want to get the first occurance of an element in a sorted array
+
+mid = math.ceil((st + en) / 2)
+
+if mid_ele == target:
+    st = mid # You don't want to loose track of the index mid because the index mid could be the left most index holding value target
+
+4)
+
+If you want to get the index of the first smallest ele less than the target
+
+if mid_ele < target:
+    st = mid # Now since you are using st = mid, to avoid infinite loop scenario, you have to use mid = math.ceil((st + en) /2)
+
+
+Conversely, if you want to get the index of the first biggest ele greater than the target
+
+if mid_ele > target:
+    en = mid # Now since you are using en = mid, you DO NOT have to think of using math.ceil
+
 '''
 1. Two Sum
 https://leetcode.com/problems/two-sum/
@@ -1377,4 +1438,884 @@ class Solution:
 '''
 time: O(n)
 space: O(n) nodes_list variable can hold n nodes in the worst case
+'''
+
+'''
+26. Remove Duplicates from Sorted Array
+https://leetcode.com/problems/remove-duplicates-from-sorted-array/
+'''
+
+
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        '''
+        1,2,3,3,3,4,4,4,5
+        1,2,3,4,5
+
+        i = 1, 2, 3, 4, 5
+        j = 1, 2, 3, 5, 8
+
+        curr_j = 3 || 4
+
+
+        '''
+
+        # approach 1
+        '''
+        i = 1
+        j = 1
+
+        if len(nums) <= 1:
+            return len(nums)
+
+        while i < len(nums) and j < len(nums):
+            if nums[i] <= nums[i - 1]:
+                curr_j = nums[j]
+
+                while j < len(nums) and nums[j] == curr_j:
+                    j += 1
+
+                if j == len(nums):
+                    break
+
+                nums[i] = nums[j]
+
+
+            i += 1
+
+            if j < i: j += 1
+
+        return i
+        '''
+
+        # approach 2
+        index = 0
+        prev_num = 'a'
+
+        for num in nums:
+            if num == prev_num:
+                continue
+            else:
+                nums[index] = num
+                prev_num = num
+                index += 1
+
+        return index
+
+
+'''
+Both approaches are O(n) but the approach 2 is simpler and easier to understand
+time: O(n)
+space: O(1)
+'''
+
+'''
+27. Remove Element
+https://leetcode.com/problems/remove-element/
+'''
+
+
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        i = 0
+        j = 1
+
+        while i < len(nums):
+
+            if nums[i] == val:
+
+                while j < len(nums) and nums[j] == val:
+                    j += 1
+
+                if j == len(nums):
+                    break
+
+                nums[i], nums[j] = nums[j], nums[i]
+
+                j += 1
+
+            i += 1
+
+            if j == i:
+                j += 1
+
+        return i
+
+
+'''
+Failed test case: 
+nums = [2] and k = 3
+changed the while condition 
+while i < len(nums) and j < len(nums) 
+to 
+while i < len(nums)
+
+time: O(n)
+space: O(1)
+'''
+
+
+'''
+28. Implement strStr()
+https://leetcode.com/problems/implement-strstr/
+'''
+
+
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        needle_len = len(needle)
+        haystack_len = len(haystack)
+
+        if haystack_len < needle_len:
+            return -1
+
+        if not needle:
+            return 0
+
+        for ind, char in enumerate(haystack):
+            if ind + needle_len > haystack_len:
+                break
+
+            j = ind
+            k = 0
+
+            while j < (ind + needle_len) and j < len(haystack) and k < needle_len and haystack[j] == needle[k]:
+                j += 1
+                k += 1
+
+            if k == needle_len:
+                return ind
+
+            # The following implementaion is more pythonic. The above approach times out. The below approach works fine
+            # Both the approaches are O(n ^ 2) time. The below approach has space O(n) but the above approach has O(1) space complexity
+
+            # if haystack[ind: ind + needle_len] == needle:
+            #    return ind
+
+        return -1
+
+
+'''
+time: O(n ^ 2)
+space: O(n)
+'''
+
+'''
+29. Divide Two Integers
+https://leetcode.com/problems/divide-two-integers/
+'''
+
+
+class Solution:
+    def divide(self, dividend: int, divisor: int) -> int:
+        res = 0
+        mult_factor = 1
+
+        if dividend < 0 and divisor < 0:
+            dividend = -dividend
+            divisor = -divisor
+
+        elif dividend < 0:
+            dividend = -dividend
+            mult_factor = -1
+
+        elif divisor < 0:
+            divisor = -divisor
+            mult_factor = -1
+
+        orig_dividend = dividend
+        orig_divisor = divisor
+        divisor_mult_factor = 1
+
+        while orig_dividend >= orig_divisor:
+
+            while dividend >= divisor:
+                res += divisor_mult_factor
+
+                dividend -= divisor
+
+                # Following are 2 ways for multiplying divisor by 2
+                # divisor += divisor
+                divisor = divisor << 1
+
+                # divisor_mult_factor += divisor_mult_factor
+                divisor_mult_factor = divisor_mult_factor << 1
+
+            orig_dividend = dividend
+
+            # --------------------------
+
+            '''
+            approach 1
+            divisor = orig_divisor
+            '''
+            # Following 2 lines are approach 2 (efficient than approach 1) check solution tab to if unable to understand
+            divisor = divisor >> 1
+            divisor_mult_factor = divisor_mult_factor >> 1
+
+            # --------------------------
+
+            if mult_factor < 0 and -res < (-2 ** 31):  # ((mult_factor * res) > (2**31 - 1)) or ((mult_factor * res) < (-2 ** 31)): Removed '*' symbol
+                return 2 ** 31 - 1
+
+            elif mult_factor > 0 and res > (2 ** 31 - 1):
+                return 2 ** 31 - 1
+
+        return -res if mult_factor < 0 else res
+
+
+'''
+Failed test cases
+1) -2147483648
+1
+
+2) -2147483648
+-1
+
+Notice 
+1) elif condition - did not have mult_factor > 0 inititally which caused the testcase -2147483648, 1 to fail
+elif mult_factor > 0 and res > (2**31 - 1):
+
+2) Notice that we are not using '*' anywhere. Rather we use -variable for negation. It is equal to -1 * variable
+
+time: O(log n)
+space: O(1)
+'''
+
+'''
+30. Substring with Concatenation of All Words
+https://leetcode.com/problems/substring-with-concatenation-of-all-words/
+
+You are given a string s and an array of strings words of the same length. Return all starting indices of substring(s) in s that is a 
+concatenation of each word in words exactly once, in any order, and without any intervening characters.
+
+You can return the answer in any order.
+
+
+
+Example 1:
+
+Input: s = "barfoothefoobarman", words = ["foo","bar"]
+Output: [0,9]
+Explanation: Substrings starting at index 0 and 9 are "barfoo" and "foobar" respectively.
+The output order does not matter, returning [9,0] is fine too.
+Example 2:
+
+Input: s = "wordgoodgoodgoodbestword", words = ["word","good","best","word"]
+Output: []
+Example 3:
+
+Input: s = "barfoofoobarthefoobarman", words = ["bar","foo","the"]
+Output: [6,9,12]
+'''
+
+
+class Solution:
+    def findSubstring(self, s, words):
+        # approach 1
+        op = []
+        word_len = len(words[0])
+        words_dict = defaultdict(int)
+        num_words = len(words)
+
+        for word in words:
+            words_dict[word] += 1
+
+        def check_if_all_subs_at_ind(ind, start_ind):
+            nonlocal word_len, words_dict
+
+            if not words_dict:
+                op.append(start_ind)
+                return True
+
+            new_word = s[ind: ind + word_len]  # O(m) m is the len of each word (will be same for all words)
+
+            if new_word in words_dict:
+                if words_dict[new_word] == 1:
+                    words_dict.pop(new_word)
+                else:
+                    words_dict[new_word] -= 1
+
+                check_if_all_subs_at_ind(ind + word_len, start_ind)
+                words_dict[new_word] += 1
+
+        i = 0
+
+        while (i < len(s)):  # O(n) n is the num of chars in s
+            if len(s) - i < word_len * num_words:
+                break
+
+            new_word = s[i: i + word_len]
+
+            if new_word in words_dict:
+
+                if words_dict[new_word] == 1:
+                    words_dict.pop(new_word)
+                else:
+                    words_dict[new_word] -= 1
+
+                check_if_all_subs_at_ind(i + word_len,
+                                         i)  # O(m) * O(m) * O(m) * ... => worst case there will be 'n' such occurances for each func call => O(m ** n)
+
+                words_dict[new_word] += 1
+
+            i += 1
+
+        return op
+
+    # approach 2
+    def findSubstring_2(self, s: str, words: List[str]) -> List[int]:
+        word_len = len(words[0])
+        visited_indices = set()
+        num_words = len(words)
+        res = []
+
+        def check_if_all_words_exist_from_index(i: int, num_visited_words: int):
+
+            if num_visited_words == num_words:
+                return True
+
+            # missed 'i + word_len' in "[i: i+word_len]" and instead had just "[i:word_len]"
+            substring_of_full_string = s[i:i + word_len]  # O(m) m is the len of each word (will be same for all words)
+
+            for word_ind, word in enumerate(words):  # O(w)  w is the num of words in input
+                if word_ind in visited_indices:
+                    continue
+
+                if substring_of_full_string == word:
+                    visited_indices.add(word_ind)
+
+                    if check_if_all_words_exist_from_index(i + word_len, num_visited_words + 1):
+                        visited_indices.remove(word_ind)
+                        return True
+
+                    visited_indices.remove(word_ind)
+
+            return False
+
+        for i in range(0, len(s)):  # O(n) n is the num of chars in s
+            if len(s) - i < word_len * num_words:
+                break
+
+            if check_if_all_words_exist_from_index(i, 0):  # O(m + w) * O(m + w) * O(m + w) * ... => worst case there will be
+                # 'w' such occurances for EACH func call => O(m + w) ** w
+                res.append(i)
+
+        return res
+
+
+'''
+
+approach 2 timed out. 
+
+approach 1 (best approach)
+time: O(n) * (O(m) ** n)
+space: O(m ** n) -> max recursion depth (recursion stack size)
+
+
+approach 2
+time: O(n) * (O(m + w) ** w)
+space: O(m + w) ** w -> Your recursion depth
+
+Verify once if the time and space compl are correct
+'''
+
+'''
+31. Next Permutation
+https://leetcode.com/problems/next-permutation/
+'''
+
+
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        # eg
+        # ips  [3,9,8,5,6,7, 4]
+        # .     [3,9,8,5,7,6,4] => [3,9,8,6,7,5,4] => [3,9,8,6,4,5,7]
+        #      [3,9,8,5,2,3, 4]
+
+        '''
+        The following code gives run time improvisation in real time but has same theoritical time complexity
+
+        rearrangement_possible = False
+        curr_min = nums[0]
+
+        for i in range(1, len(nums)):
+            if curr_min < nums[i]:
+                rearrangement_possible = True
+                break
+            else:
+                curr_min = nums[i]
+
+        #print(rearrangement_possible)
+        if not rearrangement_possible:
+            nums.sort()
+            return
+        '''
+
+        def index_of_closest_small_num_on_left(i):
+            '''
+            Function returns the index of the smallest number to the left of it
+            '''
+            for j in range(i - 1, -1, -1):
+                if nums[j] < nums[i]:
+                    return j
+
+            return -1
+
+        def rev_nums_between_left_and_right(m, n):
+            '''
+            Function reverses the digits between m and n index (both m and n included)
+            '''
+            while m < n:
+                nums[m], nums[n] = nums[n], nums[m]
+                m += 1
+                n -= 1
+
+        smallest_left_ind_to_change = float('-inf')
+        left_right_index_pair = None
+
+        for right_ind in range(len(nums) - 1, -1, -1):
+            left_ind = index_of_closest_small_num_on_left(right_ind)
+
+            if left_ind == -1:
+                continue
+
+            # We want to increase the rightmost possible index of a number to get to next largest permutation
+
+            # eg in a number wxyz => increasing the number at digit y will result in a smaller number than increasing the number at digit x
+
+            # eg number: 8 6 7 9 => swapping 8 and 9 => 9 6 7 8 whereas swapping 7 and 6 gives 8 7 6 9
+
+            if left_ind > smallest_left_ind_to_change:
+                left_right_index_pair = (left_ind, right_ind)
+                smallest_left_ind_to_change = left_ind
+
+        if not left_right_index_pair:
+            nums.sort()
+            return
+
+        left_ind, right_ind = left_right_index_pair
+
+        nums[left_ind], nums[right_ind] = nums[right_ind], nums[left_ind]
+
+        rev_nums_between_left_and_right(left_ind + 1, len(nums) - 1)
+
+        return
+
+
+'''
+time O(n)
+space: O(1)
+'''
+
+'''
+32. Longest Valid Parentheses
+https://leetcode.com/problems/longest-valid-parentheses/
+
+Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.
+
+Example 2:
+
+Input: s = ")()())"
+Output: 4
+Explanation: The longest valid parentheses substring is "()()".
+Example 3:
+'''
+
+
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        '''
+        eg testcases
+        () ( ()
+        ((())
+        () )( ()
+        '''
+        # approach 1 O(n ** 2)
+        '''
+        len_of_longest_valid_paren = 0
+
+        def get_longest_paren_from_i(i):
+            st = []
+            max_valid_paren_len_from_i = 0
+
+            for j in range(i, len(s)):
+                if st and s[j] == ')':
+                    st.pop()
+
+                    if not st:
+                        max_valid_paren_len_from_i = j - i + 1
+
+                elif s[j] == '(':
+                    st.append('(')
+
+
+                else: # stack empty and char = )
+                    break
+
+            return max_valid_paren_len_from_i
+
+
+        for i in range(0, len(s)):
+            len_longest_valid_paren_from_i = get_longest_paren_from_i(i)
+            len_of_longest_valid_paren = max(len_of_longest_valid_paren, len_longest_valid_paren_from_i)
+
+        return len_of_longest_valid_paren
+        '''
+
+        # approach 2 O(n)
+        '''
+        eg testcases
+        () ( ()  
+        ((())
+        () )( ()  
+        '''
+
+        # Notice the use of -1 when initializing the stack.
+
+        # See the video / visual of using stack approach to understand better
+
+        # We keep track of the "starting index - 1" (the index where the current valid parenthesis string starts - 1) in variable st
+
+        st = [-1]
+        longest_valid_paren_len = 0
+
+        for i, char in enumerate(s):
+
+            if char == ')':
+                st.pop()
+
+                if st:
+                    longest_valid_paren_len = max(longest_valid_paren_len, i - st[-1])
+                else:
+                    st.append(i)
+
+            else:
+                st.append(i)
+
+        return longest_valid_paren_len
+
+
+'''
+Best approach (approach 2)
+time: O(n)
+space: O(n)
+
+Other approach (approach 1)
+time: O(n ** 2)
+space: O(n)
+'''
+
+'''
+33. Search in Rotated Sorted Array
+https://leetcode.com/problems/search-in-rotated-sorted-array/
+
+eg:
+Input: nums = [4,5,6,7,0,1,2], target = 0
+Output: 4
+'''
+
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        st = 0
+        en = len(nums) - 1
+
+        while st < en:
+            mid = (st + en) // 2
+            mid_ele = nums[mid]
+
+            # First find the rotation point
+            # Notice the use of '>='. Initally had only '>' and the code failed for input [3,1], target = 1
+            if mid_ele >= nums[st] and mid_ele > nums[en]:
+                st = mid + 1  # Rotation point is on the right of mid
+
+            else:
+                en = mid  # Rotation point COULD be mid or somewhereon the right of mid
+
+            '''
+            The following are the cases handled by else block
+
+            elif mid_ele > nums[st] and mid_ele < nums[en]:
+                en = en - 1
+
+            elif mid_ele < nums[st] and mid_ele < nums[en]:
+                en = en - 1
+            '''
+        rotation_point = st
+        rotation_point_ele = nums[rotation_point]
+
+        if target >= rotation_point_ele and target <= nums[len(nums) - 1]:
+            st = rotation_point
+            en = len(nums) - 1
+
+        else:
+            st = 0
+            en = rotation_point - 1
+
+        while st <= en:
+            mid = (st + en) // 2
+            mid_ele = nums[mid]
+
+            if mid_ele == target:
+                return mid
+
+            elif target < mid_ele:
+                en = mid - 1
+
+            else:
+                st = mid + 1
+
+        return -1
+
+
+'''
+time: O(log n)
+space: O(1)
+'''
+
+'''
+34. Find First and Last Position of Element in Sorted Array
+https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+
+Input: nums = [5,7,7,8,8,10], target = 8
+Output: [3,4]
+'''
+
+import math
+
+
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        '''
+        Notice from the old approach, how handling of "if not nums:" case simplified binary search while loop
+
+        Try to keep "st < en" to keep your binary search simple.
+        '''
+        if not nums:
+            return [-1, -1]
+
+        if target > nums[-1] or target < nums[0]:
+            return [-1, -1]
+
+        '''if len(nums) == 1:
+            return (0,0) if target == nums[0] else (-1,-1)
+        '''
+
+        left_most_occurance = right_most_occurance = -1
+
+        st = 0
+        en = len(nums) - 1
+
+        # first find the left position
+        while st < en:
+            mid = (st + en) // 2
+            mid_ele = nums[mid]
+
+            if mid_ele == target:
+                en = mid
+
+
+            elif mid_ele < target:
+                st = mid + 1
+
+            else:
+                en = mid - 1
+
+        if nums[st] == target:
+            left_most_occurance = st
+
+        else:
+            return (-1, -1)
+
+        # Notice the value we are assigning to st. We know the left_most_occurance of a value. So, the right most occurance WILL be towards the right
+        # So, we initialize st to left_most_occurance
+        st = left_most_occurance
+        en = len(nums) - 1
+
+        # first find the right position
+        while st < en:
+            mid = math.ceil((st + en) / 2)
+            mid_ele = nums[mid]
+
+            if mid_ele == target:
+                st = mid
+
+                if st == en: break
+
+            elif mid_ele < target:
+                st = mid + 1
+
+            else:
+                en = mid - 1
+
+        right_most_occurance = en
+
+        return (left_most_occurance, right_most_occurance)
+
+
+'''
+time: O(log n)
+space: O(1)
+'''
+
+'''
+35. Search Insert Position
+https://leetcode.com/problems/search-insert-position/
+
+Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be 
+if it were inserted in order.
+
+You must write an algorithm with O(log n) runtime complexity.
+
+Input: nums = [1,3,5,6], target = 5
+Output: 2
+
+'''
+
+
+class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+
+        # Handling special cases like the followinf if and elif can be extremely helpful to overcome corner cases.
+        # eg: [1,3] target 0 will fail without the following if and elif case
+
+        if target < nums[0]:
+            return 0
+
+        elif target > nums[len(nums) - 1]:
+            return len(nums)
+
+        st = 0
+        en = len(nums) - 1
+
+        while st < en:
+            mid = (st + en) // 2
+            mid_ele = nums[mid]
+
+            if target == mid_ele:
+                return mid
+
+            elif target > mid_ele:
+                st = mid + 1
+
+            else:
+                en = mid
+
+        return en
+
+        '''
+        Notice how changing 
+        en = mid - 1
+        to
+        en = mid
+
+        allowed us to comment out the following lines of code. Ideas like this may come up in the interview. If it comes up in mind, use it otherwise
+        The following is still good and works
+
+        if target > nums[en]:
+            return en + 1
+
+        elif target <= nums[en]: # "=" added to handle case [1], target = 1
+            return en
+        '''
+
+
+'''
+time: O(log n)
+space: O(1)
+'''
+
+'''
+36. Valid Sudoku
+https://leetcode.com/problems/valid-sudoku/
+'''
+
+from collections import defaultdict
+
+
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        row_dict = defaultdict(set)
+        col_dict = defaultdict(set)
+        grid_dict = defaultdict(set)
+
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                cell_ele = board[i][j]
+
+                # Missed the following if
+                if cell_ele == '.':
+                    continue
+
+                grid = f'{i // 3}-{j // 3}'
+
+                if (cell_ele in row_dict[i]) or (cell_ele in col_dict[j]) or (cell_ele in grid_dict[grid]):
+                    return False
+
+                row_dict[i].add(cell_ele)
+                col_dict[j].add(cell_ele)
+                grid_dict[grid].add(cell_ele)
+
+        return True
+
+
+'''
+time: O(n) n represents the number of cells in the sudoku board
+space: O(n)
+'''
+
+'''
+38. Count and Say
+https://leetcode.com/problems/count-and-say/
+
+Input: n = 4
+Output: "1211"
+Explanation:
+countAndSay(1) = "1"
+countAndSay(2) = say "1" = one 1 = "11"
+countAndSay(3) = say "11" = two 1's = "21"
+countAndSay(4) = say "21" = one 2 + one 1 = "12" + "11" = "1211"
+'''
+
+
+class Solution:
+    def countAndSay(self, n: int) -> str:
+        current_str = start_str = '1'
+
+        while n > 1:
+
+            prev_val = None
+            new_str_list = []
+
+            for char in current_str:
+
+                if not prev_val:
+                    counter = 1
+
+                elif char != prev_val:
+                    new_str_list.append(str(counter) + prev_val)
+
+                    counter = 1
+
+                else:
+                    counter += 1
+
+                prev_val = char
+
+            new_str_list.append(str(counter) + prev_val)
+
+            n -= 1
+            current_str = ''.join(new_str_list)
+
+        return current_str
+
+
+'''
+time: O(n * x) where n is the input and x is the number of characters in the output when n = 29. Since 30 is the max input, we will loop through the result of n = 29 to form the last output string in our count and say sequence
+
+space: O(x) new_str_list will hold atmost x elements
 '''

@@ -519,7 +519,7 @@ b[0] = 2
 print(a) # prints [2,2,3]
 
 a = [1,2,3]
-c = list(a)
+c = list(a) # deep copy
 c[0] = 2
 print(a) # prints [1,2,3]
 # NEED TO USE THE ABOVE LOGIC A LOT IN MATRIX PROBLEMS. REMEMBER AKUNA INTERVIEW matrix problem?
